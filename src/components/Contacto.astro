@@ -1,5 +1,5 @@
 ---
-import { contacto } from '../data/reportaje.js';
+import { contacto } from "../data/reportaje.js";
 
 const iconos: Record<string, string> = {
   youtube:
@@ -21,35 +21,30 @@ const iconos: Record<string, string> = {
     <div class="contacto">
       <div class="contacto__intro" data-reveal>
         <p>{contacto.mensaje}</p>
-        <a class="contacto__mail" href={`mailto:${contacto.email}`}>{contacto.email}</a>
 
         <div class="redes">
-          {contacto.redes.map((r) => (
-            <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={r.nombre}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={iconos[r.icono] || ''}></svg>
-              {r.nombre}
-            </a>
-          ))}
+          {
+            contacto.redes.map((r) => (
+              <a
+                href={r.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={r.nombre}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  set:html={iconos[r.icono] || ""}
+                />
+                {r.nombre}
+              </a>
+            ))
+          }
         </div>
       </div>
-
-      <form class="form" data-contact-form data-email={contacto.email} novalidate data-reveal>
-        <div class="field">
-          <label for="c-nombre">Nombre</label>
-          <input id="c-nombre" name="nombre" type="text" autocomplete="name" required placeholder="Tu nombre" />
-        </div>
-        <div class="field">
-          <label for="c-email">Correo</label>
-          <input id="c-email" name="email" type="email" autocomplete="email" required placeholder="tu@correo.com" />
-        </div>
-        <div class="field">
-          <label for="c-mensaje">Mensaje</label>
-          <textarea id="c-mensaje" name="mensaje" required placeholder="Cuéntame en qué puedo ayudarte…"></textarea>
-        </div>
-        <button type="submit" class="btn btn--primary">Enviar mensaje</button>
-        <p class="form__note">Se abrirá tu aplicación de correo con el mensaje listo para enviar.</p>
-        <p class="form__ok" role="status">¡Gracias! Tu mensaje está listo para enviarse. ✦</p>
-      </form>
     </div>
   </div>
 </section>

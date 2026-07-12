@@ -511,8 +511,23 @@ function setupLike() {
 function setupComments() {
   const form = $('[data-comment-form]');
   const list = $('[data-comment-list]');
-  if (!form || !list) return;
+  if (!list) return;
+  const itemsBox = $('[data-comment-items]', list);
+  if (!itemsBox) return;
   const empty = $('[data-comment-empty]', list);
+  const tools = $('[data-comment-tools]', list);
+  const searchInput = $('[data-comment-search]', list);
+  const countEl = $('[data-comment-count]', list);
+  const noResults = $('[data-comment-noresults]', list);
+  const pager = $('[data-comment-pager]', list);
+  const prevBtn = $('[data-comment-prev]', list);
+  const nextBtn = $('[data-comment-next]', list);
+  const pageInfo = $('[data-comment-pageinfo]', list);
+
+  const PAGE_SIZE = 5;
+  let all = []; // ordenados del más nuevo al más antiguo (viene así del servidor)
+  let page = 0;
+  let query = '';
 
   const fmtDate = (ts) =>
     new Date(ts).toLocaleDateString('es-EC', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -522,10 +537,13 @@ function setupComments() {
     el.className = 'comentario';
     const inicial = (c.name || '?').trim().charAt(0).toUpperCase() || '?';
     el.innerHTML =
+      '<span class="comentario__index"></span>' +
+      '<div class="comentario__body">' +
       '<div class="comentario__top">' +
       '<span class="comentario__avatar"></span>' +
       '<div><p class="comentario__name"></p><p class="comentario__date"></p></div>' +
-      '</div><p class="comentario__text"></p>';
+      '</div><p class="comentario__text"></p></div>';
+    el.querySelector('.comentario__index').textContent = '#' + c._n;
     el.querySelector('.comentario__avatar').textContent = inicial;
     el.querySelector('.comentario__name').textContent = c.name;
     el.querySelector('.comentario__date').textContent = fmtDate(c.ts);
@@ -533,44 +551,118 @@ function setupComments() {
     return el;
   };
 
+  const filtered = () => {
+    if (!query) return all;
+    const q = query.toLowerCase();
+    return all.filter(
+      (c) => (c.name || '').toLowerCase().includes(q) || (c.body || '').toLowerCase().includes(q)
+    );
+  };
+
+  const render = () => {
+    const rows = filtered();
+    const total = rows.length;
+    const totalAll = all.length;
+
+    if (empty) empty.style.display = totalAll === 0 ? 'block' : 'none';
+    if (tools) tools.hidden = totalAll === 0;
+
+    const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (page >= pages) page = pages - 1;
+    if (page < 0) page = 0;
+
+    $$('.comentario', itemsBox).forEach((n) => n.remove());
+    if (noResults) noResults.hidden = !(totalAll > 0 && total === 0);
+
+    const start = page * PAGE_SIZE;
+    rows.slice(start, start + PAGE_SIZE).forEach((c) => itemsBox.appendChild(node(c)));
+
+    if (countEl) {
+      const plural = totalAll === 1 ? '' : 's';
+      countEl.textContent = query
+        ? `${total} de ${totalAll} comentario${plural}`
+        : `${totalAll} comentario${plural}`;
+    }
+
+    if (pager) {
+      pager.hidden = total <= PAGE_SIZE;
+      if (pageInfo) pageInfo.textContent = `Página ${page + 1} de ${pages}`;
+      if (prevBtn) prevBtn.disabled = page === 0;
+      if (nextBtn) nextBtn.disabled = page >= pages - 1;
+    }
+  };
+
+  const scrollToList = () => itemsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
   const refresh = async () => {
     try {
       const r = await fetch('/api/comentarios');
       if (!r.ok) return;
       const { comentarios } = await r.json();
-      $$('.comentario', list).forEach((n) => n.remove());
-      if (empty) empty.style.display = comentarios.length ? 'none' : 'block';
-      comentarios.forEach((c) => list.appendChild(node(c)));
+      all = Array.isArray(comentarios) ? comentarios : [];
+      // Numeración estable: el más antiguo es #1, el más nuevo el número mayor.
+      const n = all.length;
+      all.forEach((c, i) => (c._n = n - i));
+      render();
     } catch {
       /* sin servidor */
     }
   };
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-    const btn = form.querySelector('button[type="submit"]');
-    if (btn) btn.disabled = true;
-    try {
-      const r = await fetch('/api/comentarios', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ nombre: form.nombre.value, texto: form.texto.value }),
-      });
-      if (r.ok) {
-        form.reset();
-        await refresh();
-        refreshCounters();
-      } else {
-        const err = await r.json().catch(() => ({}));
-        alert(err.error || 'No se pudo publicar el comentario.');
-      }
-    } catch {
-      alert('No hay conexión con el servidor. Inténtalo de nuevo.');
-    } finally {
-      if (btn) btn.disabled = false;
+  if (searchInput) {
+    let t;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        query = searchInput.value.trim();
+        page = 0;
+        render();
+      }, 150);
+    });
+  }
+  prevBtn?.addEventListener('click', () => {
+    if (page > 0) {
+      page--;
+      render();
+      scrollToList();
     }
   });
+  nextBtn?.addEventListener('click', () => {
+    page++;
+    render();
+    scrollToList();
+  });
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      try {
+        const r = await fetch('/api/comentarios', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ nombre: form.nombre.value, texto: form.texto.value }),
+        });
+        if (r.ok) {
+          form.reset();
+          query = '';
+          if (searchInput) searchInput.value = '';
+          page = 0;
+          await refresh();
+          refreshCounters();
+        } else {
+          const err = await r.json().catch(() => ({}));
+          alert(err.error || 'No se pudo publicar el comentario.');
+        }
+      } catch {
+        alert('No hay conexión con el servidor. Inténtalo de nuevo.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    });
+  }
 
   refresh();
 }

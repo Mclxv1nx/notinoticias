@@ -6,7 +6,11 @@
  */
 import { createHash } from 'node:crypto';
 
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'cambia-esta-clave';
+// Lee la contraseña en TODOS los modos:
+//  - `astro dev` / `astro preview`: las variables del .env llegan por import.meta.env
+//  - servidor de producción (node / Vercel): llegan por process.env
+export const ADMIN_PASSWORD =
+  import.meta.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || 'cambia-esta-clave';
 
 /** Token determinista derivado de la contraseña (se guarda en la cookie). */
 export function authToken() {
