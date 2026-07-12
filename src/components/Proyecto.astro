@@ -1,0 +1,43 @@
+---
+import { proyecto, site } from '../data/reportaje.js';
+---
+
+<section class="section" id="proyecto">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">04 · Sobre el proyecto</p>
+      <h2>El propósito detrás del reportaje</h2>
+    </div>
+
+    <div class="proyecto" data-reveal data-tilt data-tilt-max="4">
+      <div class="proyecto__grid">
+        <div>
+          <div class="proyecto__block" style="margin-bottom: 1.8rem">
+            <h3>Propósito</h3>
+            <p>{proyecto.proposito}</p>
+          </div>
+          <div class="proyecto__block">
+            <h3>Metodología</h3>
+            <p>{proyecto.metodologia}</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="proyecto__block" style="margin-bottom: 1.4rem">
+            <h3>Objetivos</h3>
+            <ul class="proyecto__objetivos">
+              {proyecto.objetivos.map((o) => <li>{o}</li>)}
+            </ul>
+          </div>
+          <div class="proyecto__block">
+            <h3>Autoría</h3>
+            <p>{proyecto.autora}</p>
+            <p style="margin-top:.6rem; color: var(--sage-ink); font-weight:600">
+              {site.autora} · {site.rol}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

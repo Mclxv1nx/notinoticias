@@ -1,0 +1,38 @@
+---
+// Comentarios de los lectores.
+// Persisten en el servidor (base de datos SQLite) mediante /api/comentarios,
+// por lo que se comparten entre todos los visitantes.
+---
+
+<section class="section" id="comentarios">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">07 · Comentarios</p>
+      <h2>Deja tu opinión</h2>
+      <p class="section__lead">
+        Comparte tu reflexión sobre el reportaje. Tu comentario quedará publicado
+        para el resto de visitantes.
+      </p>
+    </div>
+
+    <div class="comentarios__box">
+      <form class="comentarios__form" data-comment-form data-reveal>
+        <div class="comentarios__row">
+          <div class="field">
+            <label for="k-nombre">Tu nombre</label>
+            <input id="k-nombre" name="nombre" type="text" required placeholder="¿Cómo te llamas?" maxlength="60" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="k-texto">Comentario</label>
+          <textarea id="k-texto" name="texto" required placeholder="Escribe tu comentario…" maxlength="600"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary" style="justify-self:start">Publicar comentario</button>
+      </form>
+
+      <div class="comentarios__list" data-comment-list>
+        <p class="comentarios__empty" data-comment-empty>Aún no hay comentarios. ¡Sé la primera persona en escribir!</p>
+      </div>
+    </div>
+  </div>
+</section>

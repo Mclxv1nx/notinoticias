@@ -1,0 +1,294 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+---
+
+<Layout title="Panel · Estadísticas del reportaje">
+  <main class="panel">
+    <header class="panel__top">
+      <div>
+        <p class="rule">Panel de administración</p>
+        <h1>Estadísticas del reportaje</h1>
+      </div>
+      <div class="panel__actions">
+        <a class="pbtn" href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
+        <a class="pbtn" href="/api/logout">Cerrar sesión</a>
+      </div>
+    </header>
+
+    <!-- Métricas principales -->
+    <section class="metrics" aria-label="Métricas">
+      <div class="metric"><span class="metric__n" data-p="visitas">—</span><span class="metric__l">Visitas totales</span></div>
+      <div class="metric"><span class="metric__n" data-p="visitantes">—</span><span class="metric__l">Visitantes únicos</span></div>
+      <div class="metric"><span class="metric__n" data-p="comentarios">—</span><span class="metric__l">Comentarios</span></div>
+      <div class="metric"><span class="metric__n" data-p="likes">—</span><span class="metric__l">Me gusta</span></div>
+      <div class="metric"><span class="metric__n" data-p="clicks">—</span><span class="metric__l">Clicks / taps</span></div>
+    </section>
+
+    <div class="panel__grid">
+      <!-- Visitas por día -->
+      <section class="card">
+        <h2>Visitas por día <span class="muted">(últimos 14)</span></h2>
+        <div class="daybars" data-daybars><p class="muted">Cargando…</p></div>
+      </section>
+
+      <!-- Clicks por sección -->
+      <section class="card">
+        <h2>Interacción por sección</h2>
+        <div class="ranking" data-ranking><p class="muted">Cargando…</p></div>
+      </section>
+    </div>
+
+    <!-- Mapa de calor -->
+    <section class="card">
+      <div class="heat__head">
+        <h2>Mapa de calor · zonas rojas de clicks</h2>
+        <div class="seg" role="group" aria-label="Filtrar por dispositivo">
+          <button class="seg__b is-on" data-dev="todos">Todos</button>
+          <button class="seg__b" data-dev="desktop">Escritorio</button>
+          <button class="seg__b" data-dev="mobile">Móvil</button>
+        </div>
+      </div>
+      <p class="muted heat__note">
+        Cada click/tap se guarda con su posición relativa a la página. Las zonas más
+        cálidas (rojas) concentran más interacción.
+      </p>
+      <div class="heat__wrap" data-heat-wrap>
+        <canvas data-heat></canvas>
+        <p class="heat__empty" data-heat-empty hidden>Aún no hay clicks registrados.</p>
+      </div>
+      <div class="heat__legend">
+        <span>menos</span><span class="heat__ramp"></span><span>más</span>
+      </div>
+    </section>
+
+    <!-- Comentarios -->
+    <section class="card">
+      <h2>Comentarios <span class="muted" data-cc></span></h2>
+      <div class="modlist" data-modlist><p class="muted">Cargando…</p></div>
+    </section>
+  </main>
+
+  <style>
+    .panel { max-width: 1080px; margin-inline: auto; padding: calc(var(--nav-h) + 1.5rem) var(--gutter) 4rem; }
+    .panel__top { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; justify-content: space-between; margin-bottom: 2rem; }
+    .panel__top h1 { font-size: var(--step-3); margin-top: 0.4rem; }
+    .panel__actions { display: flex; gap: 0.6rem; }
+    .pbtn { border: 1.5px solid var(--line); border-radius: 100px; padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; background: var(--white); transition: border-color .25s, transform .25s; }
+    .pbtn:hover { border-color: var(--sage-deep); transform: translateY(-2px); }
+
+    .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.4rem; }
+    .metric { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; }
+    .metric__n { display: block; font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; color: var(--terracotta-deep); }
+    .metric__l { font-size: var(--step--1); color: var(--ink-soft); }
+
+    .panel__grid { display: grid; gap: 1.2rem; margin-bottom: 1.2rem; }
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(1.2rem, 3vw, 1.8rem); box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
+    .card h2 { font-size: var(--step-1); margin-bottom: 1rem; }
+    .muted { color: var(--ink-soft); font-size: 0.85em; font-weight: 400; }
+
+    .daybars { display: flex; align-items: flex-end; gap: 6px; height: 150px; }
+    .daybars .bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+    .daybars .bar i { width: 100%; background: linear-gradient(var(--sage), var(--sage-deep)); border-radius: 5px 5px 0 0; min-height: 3px; transition: height .6s var(--ease); }
+    .daybars .bar small { font-size: 0.65rem; color: var(--ink-soft); }
+    .daybars .bar b { font-size: 0.7rem; color: var(--sage-ink); }
+
+    .ranking { display: grid; gap: 0.6rem; }
+    .rk { display: grid; grid-template-columns: 8rem 1fr auto; align-items: center; gap: 0.7rem; }
+    .rk__n { font-size: var(--step--1); font-weight: 600; color: var(--sage-ink); text-transform: capitalize; }
+    .rk__t { height: 10px; background: var(--cream-2); border-radius: 100px; overflow: hidden; }
+    .rk__f { height: 100%; background: linear-gradient(90deg, var(--terracotta), var(--terracotta-deep)); border-radius: 100px; }
+    .rk__v { font-size: 0.8rem; color: var(--ink-soft); min-width: 2rem; text-align: right; }
+
+    .heat__head { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; justify-content: space-between; }
+    .heat__note { margin: 0.4rem 0 1rem; }
+    .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 100px; overflow: hidden; }
+    .seg__b { padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); }
+    .seg__b.is-on { background: var(--sage-deep); color: var(--white); }
+    .heat__wrap { position: relative; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background:
+      repeating-linear-gradient(0deg, #fbf8f2, #fbf8f2 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, #fbf8f2, #fbf8f2 1px, transparent 1px, transparent 40px), var(--cream); }
+    .heat__wrap canvas { display: block; width: 100%; }
+    .heat__empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-soft); font-style: italic; }
+    .heat__legend { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.8rem; font-size: var(--step--1); color: var(--ink-soft); }
+    .heat__ramp { flex: 1; max-width: 240px; height: 10px; border-radius: 100px; background: linear-gradient(90deg, #2c6fb0, #38b06f, #e7c93a, #d8632f, #c62d2d); }
+
+    .modlist { display: grid; gap: 0.8rem; }
+    .mod { border: 1px solid var(--line); border-left: 3px solid var(--sage); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; display: grid; gap: 0.3rem; }
+    .mod__top { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; }
+    .mod__name { font-weight: 600; }
+    .mod__date { font-size: 0.75rem; color: var(--ink-soft); }
+    .mod__text { color: var(--ink-soft); white-space: pre-wrap; }
+    .mod__del { border: 1.5px solid var(--line); border-radius: 100px; padding: 0.3rem 0.8rem; font-size: 0.78rem; font-weight: 600; color: var(--terracotta-deep); }
+    .mod__del:hover { border-color: var(--terracotta); }
+
+    @media (min-width: 640px) {
+      .metrics { grid-template-columns: repeat(5, 1fr); }
+      .panel__grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+
+  <script>
+    // ---- Panel: carga de estadísticas y render del heatmap (todo propio) ----
+    const $ = (s, c = document) => c.querySelector(s);
+    const nf = (n) => Number(n || 0).toLocaleString('es-EC');
+
+    async function loadStats() {
+      let d;
+      try {
+        const r = await fetch('/api/stats');
+        if (!r.ok) return;
+        d = await r.json();
+      } catch { return; }
+
+      ['visitas', 'visitantes', 'comentarios', 'likes', 'clicks'].forEach((k) => {
+        const el = document.querySelector(`[data-p="${k}"]`);
+        if (el) el.textContent = nf(d[k]);
+      });
+
+      // Visitas por día
+      const wrap = $('[data-daybars]');
+      wrap.innerHTML = '';
+      const dias = d.porDia || [];
+      if (!dias.length) wrap.innerHTML = '<p class="muted">Todavía sin datos.</p>';
+      const max = Math.max(1, ...dias.map((x) => x.n));
+      dias.forEach((x) => {
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const b = document.createElement('b'); b.textContent = x.n;
+        const i = document.createElement('i'); i.style.height = (x.n / max) * 100 + '%';
+        const s = document.createElement('small'); s.textContent = (x.day || '').slice(8);
+        bar.append(b, i, s);
+        wrap.appendChild(bar);
+      });
+
+      // Ranking por sección
+      const rk = $('[data-ranking]');
+      rk.innerHTML = '';
+      const secs = d.porSeccion || [];
+      if (!secs.length) rk.innerHTML = '<p class="muted">Sin clicks todavía.</p>';
+      const rmax = Math.max(1, ...secs.map((x) => x.n));
+      secs.forEach((x) => {
+        const row = document.createElement('div');
+        row.className = 'rk';
+        const n = document.createElement('span'); n.className = 'rk__n'; n.textContent = x.section;
+        const t = document.createElement('span'); t.className = 'rk__t';
+        const f = document.createElement('span'); f.className = 'rk__f'; f.style.width = (x.n / rmax) * 100 + '%'; f.style.display = 'block'; f.style.height = '100%';
+        t.appendChild(f);
+        const v = document.createElement('span'); v.className = 'rk__v'; v.textContent = x.n;
+        row.append(n, t, v);
+        rk.appendChild(row);
+      });
+
+      // Comentarios
+      const cc = $('[data-cc]'); if (cc) cc.textContent = `(${nf(d.comentarios)})`;
+      const ml = $('[data-modlist]');
+      ml.innerHTML = '';
+      const coms = d.comentarios_lista || [];
+      if (!coms.length) ml.innerHTML = '<p class="muted">Aún no hay comentarios.</p>';
+      coms.forEach((c) => {
+        const el = document.createElement('div');
+        el.className = 'mod';
+        const top = document.createElement('div'); top.className = 'mod__top';
+        const meta = document.createElement('div');
+        const nm = document.createElement('span'); nm.className = 'mod__name'; nm.textContent = c.name;
+        const dt = document.createElement('span'); dt.className = 'mod__date';
+        dt.textContent = '  ' + new Date(c.ts).toLocaleString('es-EC');
+        meta.append(nm, dt);
+        const del = document.createElement('button'); del.className = 'mod__del'; del.textContent = 'Eliminar';
+        del.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar este comentario?')) return;
+          await fetch('/api/moderar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: c.id }) });
+          loadStats();
+        });
+        top.append(meta, del);
+        const tx = document.createElement('p'); tx.className = 'mod__text'; tx.textContent = c.body;
+        el.append(top, tx);
+        ml.appendChild(el);
+      });
+    }
+
+    // ---- Heatmap ----
+    let rampCache = null;
+    function ramp() {
+      if (rampCache) return rampCache;
+      const c = document.createElement('canvas'); c.width = 256; c.height = 1;
+      const x = c.getContext('2d');
+      const g = x.createLinearGradient(0, 0, 256, 0);
+      g.addColorStop(0.0, '#2c6fb0');
+      g.addColorStop(0.35, '#38b06f');
+      g.addColorStop(0.6, '#e7c93a');
+      g.addColorStop(0.8, '#d8632f');
+      g.addColorStop(1.0, '#c62d2d');
+      x.fillStyle = g; x.fillRect(0, 0, 256, 1);
+      rampCache = x.getImageData(0, 0, 256, 1).data;
+      return rampCache;
+    }
+
+    function drawHeat(points) {
+      const wrap = $('[data-heat-wrap]');
+      const canvas = $('[data-heat]');
+      const empty = $('[data-heat-empty]');
+      const W = Math.max(320, Math.round(wrap.clientWidth));
+      const H = Math.round(W * 1.5);
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, W, H);
+      empty.hidden = points.length > 0;
+      if (!points.length) return;
+
+      const r = Math.max(16, Math.round(W * 0.035));
+      ctx.globalCompositeOperation = 'lighter';
+      points.forEach((p) => {
+        const x = p.x * W, y = p.y * H;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        grad.addColorStop(0, 'rgba(0,0,0,0.16)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalCompositeOperation = 'source-over';
+
+      const img = ctx.getImageData(0, 0, W, H);
+      const data = img.data;
+      const rmp = ramp();
+      for (let i = 0; i < data.length; i += 4) {
+        const a = data[i + 3];
+        if (!a) continue;
+        const idx = Math.min(255, a) * 4;
+        data[i] = rmp[idx];
+        data[i + 1] = rmp[idx + 1];
+        data[i + 2] = rmp[idx + 2];
+        data[i + 3] = Math.min(235, a + 40);
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    let currentDev = 'todos';
+    async function loadHeatmap() {
+      try {
+        const r = await fetch('/api/heatmap?device=' + currentDev);
+        if (!r.ok) return;
+        const { puntos } = await r.json();
+        drawHeat(puntos || []);
+      } catch { /* nada */ }
+    }
+
+    document.querySelectorAll('[data-dev]').forEach((b) => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('[data-dev]').forEach((x) => x.classList.remove('is-on'));
+        b.classList.add('is-on');
+        currentDev = b.dataset.dev;
+        loadHeatmap();
+      });
+    });
+
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(loadHeatmap, 250); });
+
+    loadStats();
+    loadHeatmap();
+    setInterval(loadStats, 30000);
+  </script>
+</Layout>

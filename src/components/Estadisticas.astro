@@ -1,0 +1,65 @@
+---
+import { estadisticas } from '../data/reportaje.js';
+
+const maxAnios = Math.max(...estadisticas.trayectorias.map((t) => t.anios));
+---
+
+<section class="section" id="estadisticas">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">03 · Estadísticas e infografías</p>
+      <h2>La tradición en cifras</h2>
+      <p class="section__lead">{estadisticas.nota}</p>
+    </div>
+
+    <!-- Métricas en vivo (desde el servidor) -->
+    <div class="live" data-reveal>
+      <div class="live__item">
+        <span class="live__num" data-live="visitas">—</span>
+        <span class="live__label">visitas</span>
+      </div>
+      <div class="live__item">
+        <span class="live__num" data-live="visitantes">—</span>
+        <span class="live__label">visitantes únicos</span>
+      </div>
+      <div class="live__item">
+        <span class="live__num" data-live="comentarios">—</span>
+        <span class="live__label">comentarios</span>
+      </div>
+      <div class="live__item">
+        <span class="live__num" data-live="likes">—</span>
+        <span class="live__label">me gusta</span>
+      </div>
+      <span class="live__badge" aria-hidden="true"><span></span>en vivo</span>
+    </div>
+
+    <!-- Contadores animados -->
+    <div class="stats">
+      {estadisticas.contadores.map((c) => (
+        <div class="stat" data-reveal>
+          <div class="stat__num">
+            <span data-count={c.valor}>0</span>{c.sufijo}
+          </div>
+          <p class="stat__label">{c.etiqueta}</p>
+          <p class="stat__detail">{c.detalle}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Infografía de barras -->
+    <div class="infografia" data-reveal>
+      <h3>Años de trayectoria por maestro</h3>
+      <p class="infografia__nota">Comparativa de la experiencia de cada artesano entrevistado.</p>
+
+      {estadisticas.trayectorias.map((t) => (
+        <div class="bar">
+          <span class="bar__name">{t.nombre}</span>
+          <span class="bar__track">
+            <span class="bar__fill" data-bar={(t.anios / maxAnios).toFixed(3)}></span>
+          </span>
+          <span class="bar__val">{t.anios} a.</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

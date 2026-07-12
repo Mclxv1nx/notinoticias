@@ -1,0 +1,101 @@
+---
+import { artesanos, galeria } from "../data/reportaje.js";
+---
+
+<section class="section" id="multimedia">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">02 · Contenido multimedia</p>
+      <h2>Las entrevistas en video</h2>
+      <p class="section__lead">
+        Cinco conversaciones grabadas en los talleres de San Antonio de Ibarra.
+        Pulsa cualquier miniatura para reproducir.
+      </p>
+    </div>
+
+    <div class="videos">
+      {
+        artesanos.map((a) => (
+          <article class="video-card" id={`video-${a.numero}`} data-reveal>
+            <div
+              class="video-card__frame"
+              data-video-id={a.videoId}
+              data-video-title={`Entrevista N.º ${a.numero} — ${a.nombre}`}
+              role="button"
+              tabindex="0"
+              aria-label={`Reproducir entrevista de ${a.nombre}`}
+            >
+              <img
+                src={`https://i.ytimg.com/vi/${a.videoId}/hqdefault.jpg`}
+                alt={`Miniatura de la entrevista a ${a.nombre}`}
+                loading="lazy"
+                width="480"
+                height="360"
+              />
+              <span class="video-card__play">
+                <span>
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+              </span>
+            </div>
+            <div class="video-card__meta">
+              <p class="eyebrow">Entrevista N.º {a.numero}</p>
+              <h4>{a.nombre}</h4>
+              <p>{a.titular}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Galería fotográfica -->
+    <div
+      class="section__head"
+      data-reveal
+      style="margin-top: clamp(3rem, 7vw, 5rem)"
+    >
+      <p class="rule">Galería</p>
+      <h2 style="font-size: var(--step-3)">El pueblo y su oficio</h2>
+    </div>
+
+    <div class="galeria" data-gallery>
+      {
+        galeria.map((g) => (
+          <figure
+            class="galeria__item"
+            data-reveal
+            data-lightbox={g.src}
+            data-caption={g.caption}
+          >
+            <img
+              src={g.src}
+              alt={g.alt}
+              loading="lazy"
+              width="420"
+              height="420"
+            />
+            <figcaption>{g.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" data-lightbox-modal aria-hidden="true">
+    <button class="lightbox__close" data-lightbox-close aria-label="Cerrar"
+      >&times;</button
+    >
+    <div>
+      <img src="" alt="" data-lightbox-img />
+      <p class="lightbox__cap" data-lightbox-cap></p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,39 @@
+---
+import { site, navegacion, contacto } from '../data/reportaje.js';
+const anio = new Date().getFullYear();
+---
+
+<footer class="footer" id="pie">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <p class="footer__brand" data-reveal>{site.titulo}</p>
+        <p class="footer__meta" data-reveal style="margin-top:.8rem">{site.subtitulo}.</p>
+      </div>
+
+      <nav aria-label="Secciones" data-reveal>
+        <p class="eyebrow" style="margin-bottom:.8rem">Secciones</p>
+        <ul style="display:grid; gap:.5rem">
+          {navegacion.map((n) => (
+            <li><a href={`#${n.id}`} style="color:var(--ink-soft)">{n.etiqueta}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div data-reveal>
+        <p class="eyebrow" style="margin-bottom:.8rem">Redes</p>
+        <ul style="display:grid; gap:.5rem">
+          {contacto.redes.map((r) => (
+            <li><a href={r.url} target="_blank" rel="noopener noreferrer" style="color:var(--ink-soft)">{r.nombre}</a></li>
+          ))}
+          <li><a href={`mailto:${contacto.email}`} style="color:var(--ink-soft)">{contacto.email}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {anio} · {site.autora}. Reportaje sobre San Antonio de Ibarra.</span>
+      <span>{site.ubicacion}</span>
+    </div>
+  </div>
+</footer>

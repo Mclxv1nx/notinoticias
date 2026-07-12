@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Reportaje from '../components/Reportaje.astro';
+import Multimedia from '../components/Multimedia.astro';
+import Estadisticas from '../components/Estadisticas.astro';
+import Proyecto from '../components/Proyecto.astro';
+import Fuentes from '../components/Fuentes.astro';
+import Contacto from '../components/Contacto.astro';
+import Compartir from '../components/Compartir.astro';
+import Comentarios from '../components/Comentarios.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout>
+  <!-- Fondo animado (parallax + movimiento con el mouse) -->
+  <div class="backdrop" aria-hidden="true" data-backdrop>
+    <div class="backdrop__blob backdrop__blob--1" data-blob="1"></div>
+    <div class="backdrop__blob backdrop__blob--2" data-blob="2"></div>
+    <div class="backdrop__blob backdrop__blob--3" data-blob="3"></div>
+    <svg class="backdrop__hills" data-hills viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#c6d3ba" fill-opacity="0.55" d="M0 220 L120 200 C300 170 480 240 720 220 C960 200 1140 150 1320 180 L1440 200 L1440 320 L0 320 Z"></path>
+      <path fill="#a7bb98" fill-opacity="0.6" d="M0 260 C240 210 480 280 720 260 C960 240 1200 290 1440 250 L1440 320 L0 320 Z"></path>
+    </svg>
+  </div>
+
+  <Nav />
+
+  <main>
+    <Hero />
+    <Reportaje />
+    <Multimedia />
+    <Estadisticas />
+    <Proyecto />
+    <Fuentes />
+    <Contacto />
+    <Compartir />
+    <Comentarios />
+  </main>
+
+  <Footer />
+
+  <!-- Animaciones e interactividad (GSAP + Lenis, del lado del cliente) -->
+  <script>
+    import { initApp } from '../scripts/main.js';
+    initApp();
+  </script>
+</Layout>

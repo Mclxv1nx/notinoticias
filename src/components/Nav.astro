@@ -1,0 +1,29 @@
+---
+import { navegacion, site } from '../data/reportaje.js';
+---
+
+<header class="nav" id="nav" data-nav>
+  <div class="nav__inner">
+    <a href="#inicio" class="brand" aria-label={`${site.titulo} — inicio`}>
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="32" fill="#8CA17C"></circle>
+        <path d="M32 46c0-10 5-16 14-18-2 9-6 15-14 18Z" fill="#FAF6EF"></path>
+        <path d="M32 46c0-8-4-13-11-15 1 7 4 12 11 15Z" fill="#FAF6EF" opacity="0.85"></path>
+        <path d="M32 47V30" stroke="#FAF6EF" stroke-width="2.4" stroke-linecap="round"></path>
+      </svg>
+      <span>San Antonio<span style="color:var(--terracotta-deep)">·</span>Madera</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Navegación principal">
+      {navegacion.map((n) => <a href={`#${n.id}`} data-nav-link={n.id}>{n.etiqueta}</a>)}
+    </nav>
+
+    <button class="nav__toggle" type="button" aria-label="Abrir menú" aria-expanded="false" data-nav-toggle>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav__panel" data-nav-panel>
+    {navegacion.map((n) => <a href={`#${n.id}`} data-nav-link={n.id}>{n.etiqueta}</a>)}
+  </div>
+</header>

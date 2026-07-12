@@ -1,0 +1,52 @@
+---
+import { site } from '../data/reportaje.js';
+---
+
+<section class="hero" id="inicio">
+  <div class="container hero__grid">
+    <div class="hero__content">
+      <p class="eyebrow hero__kicker" data-reveal>{site.kicker}</p>
+
+      <h1 class="hero__title" data-reveal data-parallax="0.12">
+        El alma <em>tallada</em><br />en madera
+      </h1>
+
+      <p class="hero__sub" data-reveal>{site.subtitulo}</p>
+      <p class="hero__intro" data-reveal>{site.intro}</p>
+
+      <div class="hero__meta" data-reveal>
+        <span>{site.ubicacion}</span>
+        <span>{site.autora} · {site.anio}</span>
+      </div>
+
+      <div class="hero__cta" data-reveal>
+        <a href="#reportaje" class="btn btn--primary">
+          Leer el reportaje
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+        <a href="#multimedia" class="btn btn--ghost">Ver las entrevistas</a>
+      </div>
+    </div>
+
+    <div class="hero__media" data-reveal>
+      <div class="hero__card" data-tilt data-parallax="-0.08">
+        <img src="/images/anahi-principal.jpg" alt="La autora sostiene una escultura de madera tallada en San Antonio de Ibarra." width="1280" height="963" fetchpriority="high" />
+        <p class="hero__badge">Imaginería tallada a mano · San Antonio de Ibarra</p>
+      </div>
+
+      <div class="hero__float hero__float--top" data-float="1.4">
+        <strong>5</strong>
+        <span>maestros<br />entrevistados</span>
+      </div>
+      <div class="hero__float hero__float--bottom" data-float="-1.1">
+        <strong>+100</strong>
+        <span>años de<br />tradición</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span></span>
+    Desliza
+  </div>
+</section>

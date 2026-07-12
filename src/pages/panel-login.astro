@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+
+const error = Astro.url.searchParams.get('error');
+---
+
+<Layout title="Panel · Acceso">
+  <main class="auth">
+    <form class="auth__box" method="POST" action="/api/login">
+      <p class="rule">Panel de administración</p>
+      <h1>Estadísticas del reportaje</h1>
+      <p class="auth__hint">Ingresa la contraseña para ver visitas, comentarios, likes y el mapa de calor.</p>
+      {error && <p class="auth__err">Contraseña incorrecta. Inténtalo de nuevo.</p>}
+      <label class="auth__field">
+        <span>Contraseña</span>
+        <input type="password" name="password" autocomplete="current-password" required autofocus />
+      </label>
+      <button class="btn btn--primary" type="submit">Entrar</button>
+      <a href="/" class="auth__back">← Volver al reportaje</a>
+    </form>
+  </main>
+
+  <style>
+    .auth {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1.2rem;
+    }
+    .auth__box {
+      width: 100%;
+      max-width: 25rem;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: clamp(1.6rem, 5vw, 2.6rem);
+      display: grid;
+      gap: 0.7rem;
+    }
+    .auth__box h1 {
+      font-size: var(--step-2);
+      margin-bottom: 0.2rem;
+    }
+    .auth__hint {
+      color: var(--ink-soft);
+      font-size: var(--step--1);
+      margin-bottom: 0.6rem;
+    }
+    .auth__err {
+      color: var(--terracotta-deep);
+      font-weight: 600;
+      font-size: var(--step--1);
+    }
+    .auth__field {
+      display: grid;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+    .auth__field span {
+      font-size: var(--step--1);
+      font-weight: 600;
+      color: var(--sage-ink);
+    }
+    .auth__field input {
+      font: inherit;
+      padding: 0.75rem 0.9rem;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--cream);
+    }
+    .auth__field input:focus {
+      outline: none;
+      border-color: var(--sage-deep);
+      background: var(--white);
+    }
+    .auth__back {
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: var(--step--1);
+      margin-top: 0.4rem;
+    }
+  </style>
+</Layout>

@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import { site } from '../data/reportaje.js';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${site.titulo} · ${site.subtitulo}`,
+  description = site.intro,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.autora} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/anahi-principal.jpg" />
+    <meta property="og:locale" content="es_EC" />
+
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Evita el parpadeo de contenido antes de que corran las animaciones.
+         Si el JS falla, un temporizador revela todo igualmente. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce) root.classList.add('gsap-ready');
+        // Fallback de seguridad: revelar si las animaciones no arrancaron.
+        window.setTimeout(function () {
+          if (!document.body.classList.contains('is-animated')) {
+            root.classList.remove('gsap-ready');
+          }
+        }, 2600);
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

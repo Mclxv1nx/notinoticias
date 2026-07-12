@@ -1,0 +1,55 @@
+---
+import { contacto } from '../data/reportaje.js';
+
+const iconos = {
+  youtube:
+    '<path d="M23 12s0-3.5-.4-5.1a2.6 2.6 0 0 0-1.8-1.8C19 4.7 12 4.7 12 4.7s-7 0-8.8.4A2.6 2.6 0 0 0 1.4 6.9C1 8.5 1 12 1 12s0 3.5.4 5.1a2.6 2.6 0 0 0 1.8 1.8c1.8.4 8.8.4 8.8.4s7 0 8.8-.4a2.6 2.6 0 0 0 1.8-1.8C23 15.5 23 12 23 12ZM9.8 15.3V8.7l5.7 3.3-5.7 3.3Z"/>',
+  instagram:
+    '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.4"/>',
+  tiktok:
+    '<path d="M16.5 3c.3 2.1 1.6 3.6 3.7 3.8v2.4c-1.3.1-2.5-.3-3.6-1v5.7a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.6a2.8 2.8 0 1 0 2 2.7V3h2.3Z"/>',
+};
+---
+
+<section class="section" id="contacto">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">06 · Contacto</p>
+      <h2>Hablemos sobre el oficio</h2>
+    </div>
+
+    <div class="contacto">
+      <div class="contacto__intro" data-reveal>
+        <p>{contacto.mensaje}</p>
+        <a class="contacto__mail" href={`mailto:${contacto.email}`}>{contacto.email}</a>
+
+        <div class="redes">
+          {contacto.redes.map((r) => (
+            <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={r.nombre}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={iconos[r.icono] || ''}></svg>
+              {r.nombre}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <form class="form" data-contact-form data-email={contacto.email} novalidate data-reveal>
+        <div class="field">
+          <label for="c-nombre">Nombre</label>
+          <input id="c-nombre" name="nombre" type="text" autocomplete="name" required placeholder="Tu nombre" />
+        </div>
+        <div class="field">
+          <label for="c-email">Correo</label>
+          <input id="c-email" name="email" type="email" autocomplete="email" required placeholder="tu@correo.com" />
+        </div>
+        <div class="field">
+          <label for="c-mensaje">Mensaje</label>
+          <textarea id="c-mensaje" name="mensaje" required placeholder="Cuéntame en qué puedo ayudarte…"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary">Enviar mensaje</button>
+        <p class="form__note">Se abrirá tu aplicación de correo con el mensaje listo para enviar.</p>
+        <p class="form__ok" role="status">¡Gracias! Tu mensaje está listo para enviarse. ✦</p>
+      </form>
+    </div>
+  </div>
+</section>
