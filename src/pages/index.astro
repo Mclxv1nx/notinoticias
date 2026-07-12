@@ -41,6 +41,12 @@ import Footer from '../components/Footer.astro';
 
   <Footer />
 
+  <!-- Botón de like flotante (abajo a la derecha) -->
+  <button class="fab-like" data-like aria-pressed="false" aria-label="Me gusta esta página" title="Me gusta esta página">
+    <svg class="fab-like__heart" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+    <span class="fab-like__count" data-like-count>0</span>
+  </button>
+
   <!-- Animaciones e interactividad (GSAP + Lenis, del lado del cliente) -->
   <script>
     import { initApp } from '../scripts/main.js';

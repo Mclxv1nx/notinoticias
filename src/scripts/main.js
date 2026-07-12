@@ -475,30 +475,35 @@ async function pingVisit() {
 
 /* ----------------------------------------------------------------- Like */
 function setupLike() {
-  const btn = $('[data-like]');
-  if (!btn) return;
-  const countEl = $('[data-like-count]') || null;
+  const btns = $$('[data-like]');
+  if (!btns.length) return;
+  const counts = $$('[data-like-count]');
   const paint = (s) => {
-    btn.classList.toggle('is-liked', !!s.liked);
-    btn.setAttribute('aria-pressed', String(!!s.liked));
-    if (countEl && s.count != null) countEl.textContent = nfmt(s.count);
-    fillCounters({ likes: s.count });
+    btns.forEach((b) => {
+      b.classList.toggle('is-liked', !!s.liked);
+      b.setAttribute('aria-pressed', String(!!s.liked));
+    });
+    if (s && s.count != null) {
+      counts.forEach((c) => (c.textContent = nfmt(s.count)));
+      fillCounters({ likes: s.count });
+    }
   };
   fetch('/api/like')
     .then((r) => r.json())
     .then(paint)
     .catch(() => {});
-  btn.addEventListener('click', async () => {
-    btn.disabled = true;
+  const toggle = async () => {
+    btns.forEach((b) => (b.disabled = true));
     try {
       const r = await fetch('/api/like', { method: 'POST' });
       if (r.ok) paint(await r.json());
     } catch {
       /* sin servidor */
     } finally {
-      btn.disabled = false;
+      btns.forEach((b) => (b.disabled = false));
     }
-  });
+  };
+  btns.forEach((b) => b.addEventListener('click', toggle));
 }
 
 /* ----------------------------------------------------------------- Comentarios */

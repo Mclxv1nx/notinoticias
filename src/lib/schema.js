@@ -76,4 +76,5 @@ export const SQL = {
     SELECT COALESCE(section, 'sin-seccion') AS section, COUNT(*) AS n
     FROM clicks GROUP BY section ORDER BY n DESC LIMIT 20`,
   countClicks: `SELECT COUNT(*) AS n FROM clicks`,
+  visitsByDevice: `SELECT device, COUNT(*) AS n FROM visits GROUP BY device`,
 };

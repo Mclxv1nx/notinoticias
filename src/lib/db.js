@@ -118,11 +118,12 @@ export async function publicCounters() {
 
 /* ----------------------------------------------------- Estadísticas del panel */
 export async function fullStats() {
-  const [base, clk, dia, sec, coms] = await Promise.all([
+  const [base, clk, dia, sec, dev, coms] = await Promise.all([
     publicCounters(),
     first('countClicks'),
     all('visitsByDay'),
     all('clicksBySection'),
+    all('visitsByDevice'),
     listComments(500),
   ]);
   return {
@@ -130,6 +131,7 @@ export async function fullStats() {
     clicks: num(clk.n),
     porDia: dia.reverse(),
     porSeccion: sec,
+    porDispositivo: dev,
     comentarios_lista: coms,
   };
 }

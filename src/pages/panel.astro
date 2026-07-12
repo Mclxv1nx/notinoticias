@@ -26,19 +26,25 @@ export const prerender = false;
       <div class="metric"><span class="metric__n" data-p="clicks">—</span><span class="metric__l">Clicks / taps</span></div>
     </section>
 
-    <div class="panel__grid">
-      <!-- Visitas por día -->
+    <!-- Gráficos -->
+    <div class="grid2">
       <section class="card">
         <h2>Visitas por día <span class="muted">(últimos 14)</span></h2>
-        <div class="daybars" data-daybars><p class="muted">Cargando…</p></div>
+        <div class="chartbox"><canvas id="chartDia"></canvas></div>
+        <p class="empty" data-empty="dia" hidden>Aún no hay visitas registradas.</p>
       </section>
-
-      <!-- Clicks por sección -->
       <section class="card">
-        <h2>Interacción por sección</h2>
-        <div class="ranking" data-ranking><p class="muted">Cargando…</p></div>
+        <h2>Visitas por dispositivo</h2>
+        <div class="chartbox"><canvas id="chartDisp"></canvas></div>
+        <p class="empty" data-empty="disp" hidden>Aún no hay datos.</p>
       </section>
     </div>
+
+    <section class="card">
+      <h2>Interacción por sección <span class="muted">(clicks)</span></h2>
+      <div class="chartbox chartbox--tall"><canvas id="chartSec"></canvas></div>
+      <p class="empty" data-empty="sec" hidden>Aún no hay clicks registrados.</p>
+    </section>
 
     <!-- Mapa de calor -->
     <section class="card">
@@ -50,17 +56,12 @@ export const prerender = false;
           <button class="seg__b" data-dev="mobile">Móvil</button>
         </div>
       </div>
-      <p class="muted heat__note">
-        Cada click/tap se guarda con su posición relativa a la página. Las zonas más
-        cálidas (rojas) concentran más interacción.
-      </p>
+      <p class="muted heat__note">Cada punto es un click/tap según su posición en la página. Las zonas rojas concentran más interacción.</p>
       <div class="heat__wrap" data-heat-wrap>
         <canvas data-heat></canvas>
         <p class="heat__empty" data-heat-empty hidden>Aún no hay clicks registrados.</p>
       </div>
-      <div class="heat__legend">
-        <span>menos</span><span class="heat__ramp"></span><span>más</span>
-      </div>
+      <div class="heat__legend"><span>menos</span><span class="heat__ramp"></span><span>más</span></div>
     </section>
 
     <!-- Comentarios -->
@@ -83,23 +84,14 @@ export const prerender = false;
     .metric__n { display: block; font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; color: var(--terracotta-deep); }
     .metric__l { font-size: var(--step--1); color: var(--ink-soft); }
 
-    .panel__grid { display: grid; gap: 1.2rem; margin-bottom: 1.2rem; }
     .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(1.2rem, 3vw, 1.8rem); box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
     .card h2 { font-size: var(--step-1); margin-bottom: 1rem; }
     .muted { color: var(--ink-soft); font-size: 0.85em; font-weight: 400; }
+    .empty { color: var(--ink-soft); font-style: italic; margin-top: .6rem; }
 
-    .daybars { display: flex; align-items: flex-end; gap: 6px; height: 150px; }
-    .daybars .bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
-    .daybars .bar i { width: 100%; background: linear-gradient(var(--sage), var(--sage-deep)); border-radius: 5px 5px 0 0; min-height: 3px; transition: height .6s var(--ease); }
-    .daybars .bar small { font-size: 0.65rem; color: var(--ink-soft); }
-    .daybars .bar b { font-size: 0.7rem; color: var(--sage-ink); }
-
-    .ranking { display: grid; gap: 0.6rem; }
-    .rk { display: grid; grid-template-columns: 8rem 1fr auto; align-items: center; gap: 0.7rem; }
-    .rk__n { font-size: var(--step--1); font-weight: 600; color: var(--sage-ink); text-transform: capitalize; }
-    .rk__t { height: 10px; background: var(--cream-2); border-radius: 100px; overflow: hidden; }
-    .rk__f { height: 100%; background: linear-gradient(90deg, var(--terracotta), var(--terracotta-deep)); border-radius: 100px; }
-    .rk__v { font-size: 0.8rem; color: var(--ink-soft); min-width: 2rem; text-align: right; }
+    .grid2 { display: grid; gap: 1.2rem; }
+    .chartbox { position: relative; height: 260px; }
+    .chartbox--tall { height: 340px; }
 
     .heat__head { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; justify-content: space-between; }
     .heat__note { margin: 0.4rem 0 1rem; }
@@ -125,170 +117,156 @@ export const prerender = false;
 
     @media (min-width: 640px) {
       .metrics { grid-template-columns: repeat(5, 1fr); }
-      .panel__grid { grid-template-columns: 1fr 1fr; }
+      .grid2 { grid-template-columns: 1.4fr 1fr; }
     }
   </style>
 
-  <script>
-    // ---- Panel: carga de estadísticas y render del heatmap (todo propio) ----
-    const $ = (s, c = document) => c.querySelector(s);
-    const nf = (n) => Number(n || 0).toLocaleString('es-EC');
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script is:inline>
+    (function () {
+      var nf = function (n) { return Number(n || 0).toLocaleString('es-EC'); };
+      var charts = {};
+      var COL = { sage: '#7e9670', sageSoft: '#a7bb98', terr: '#c79a7e', terrDeep: '#b07f61', ink: '#6c665b', line: '#ece3d5' };
 
-    async function loadStats() {
-      let d;
-      try {
-        const r = await fetch('/api/stats');
-        if (!r.ok) return;
-        d = await r.json();
-      } catch { return; }
-
-      ['visitas', 'visitantes', 'comentarios', 'likes', 'clicks'].forEach((k) => {
-        const el = document.querySelector(`[data-p="${k}"]`);
-        if (el) el.textContent = nf(d[k]);
-      });
-
-      // Visitas por día
-      const wrap = $('[data-daybars]');
-      wrap.innerHTML = '';
-      const dias = d.porDia || [];
-      if (!dias.length) wrap.innerHTML = '<p class="muted">Todavía sin datos.</p>';
-      const max = Math.max(1, ...dias.map((x) => x.n));
-      dias.forEach((x) => {
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        const b = document.createElement('b'); b.textContent = x.n;
-        const i = document.createElement('i'); i.style.height = (x.n / max) * 100 + '%';
-        const s = document.createElement('small'); s.textContent = (x.day || '').slice(8);
-        bar.append(b, i, s);
-        wrap.appendChild(bar);
-      });
-
-      // Ranking por sección
-      const rk = $('[data-ranking]');
-      rk.innerHTML = '';
-      const secs = d.porSeccion || [];
-      if (!secs.length) rk.innerHTML = '<p class="muted">Sin clicks todavía.</p>';
-      const rmax = Math.max(1, ...secs.map((x) => x.n));
-      secs.forEach((x) => {
-        const row = document.createElement('div');
-        row.className = 'rk';
-        const n = document.createElement('span'); n.className = 'rk__n'; n.textContent = x.section;
-        const t = document.createElement('span'); t.className = 'rk__t';
-        const f = document.createElement('span'); f.className = 'rk__f'; f.style.width = (x.n / rmax) * 100 + '%'; f.style.display = 'block'; f.style.height = '100%';
-        t.appendChild(f);
-        const v = document.createElement('span'); v.className = 'rk__v'; v.textContent = x.n;
-        row.append(n, t, v);
-        rk.appendChild(row);
-      });
-
-      // Comentarios
-      const cc = $('[data-cc]'); if (cc) cc.textContent = `(${nf(d.comentarios)})`;
-      const ml = $('[data-modlist]');
-      ml.innerHTML = '';
-      const coms = d.comentarios_lista || [];
-      if (!coms.length) ml.innerHTML = '<p class="muted">Aún no hay comentarios.</p>';
-      coms.forEach((c) => {
-        const el = document.createElement('div');
-        el.className = 'mod';
-        const top = document.createElement('div'); top.className = 'mod__top';
-        const meta = document.createElement('div');
-        const nm = document.createElement('span'); nm.className = 'mod__name'; nm.textContent = c.name;
-        const dt = document.createElement('span'); dt.className = 'mod__date';
-        dt.textContent = '  ' + new Date(c.ts).toLocaleString('es-EC');
-        meta.append(nm, dt);
-        const del = document.createElement('button'); del.className = 'mod__del'; del.textContent = 'Eliminar';
-        del.addEventListener('click', async () => {
-          if (!confirm('¿Eliminar este comentario?')) return;
-          await fetch('/api/moderar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: c.id }) });
-          loadStats();
-        });
-        top.append(meta, del);
-        const tx = document.createElement('p'); tx.className = 'mod__text'; tx.textContent = c.body;
-        el.append(top, tx);
-        ml.appendChild(el);
-      });
-    }
-
-    // ---- Heatmap ----
-    let rampCache = null;
-    function ramp() {
-      if (rampCache) return rampCache;
-      const c = document.createElement('canvas'); c.width = 256; c.height = 1;
-      const x = c.getContext('2d');
-      const g = x.createLinearGradient(0, 0, 256, 0);
-      g.addColorStop(0.0, '#2c6fb0');
-      g.addColorStop(0.35, '#38b06f');
-      g.addColorStop(0.6, '#e7c93a');
-      g.addColorStop(0.8, '#d8632f');
-      g.addColorStop(1.0, '#c62d2d');
-      x.fillStyle = g; x.fillRect(0, 0, 256, 1);
-      rampCache = x.getImageData(0, 0, 256, 1).data;
-      return rampCache;
-    }
-
-    function drawHeat(points) {
-      const wrap = $('[data-heat-wrap]');
-      const canvas = $('[data-heat]');
-      const empty = $('[data-heat-empty]');
-      const W = Math.max(320, Math.round(wrap.clientWidth));
-      const H = Math.round(W * 1.5);
-      canvas.width = W; canvas.height = H;
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, W, H);
-      empty.hidden = points.length > 0;
-      if (!points.length) return;
-
-      const r = Math.max(16, Math.round(W * 0.035));
-      ctx.globalCompositeOperation = 'lighter';
-      points.forEach((p) => {
-        const x = p.x * W, y = p.y * H;
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-        grad.addColorStop(0, 'rgba(0,0,0,0.16)');
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-      });
-      ctx.globalCompositeOperation = 'source-over';
-
-      const img = ctx.getImageData(0, 0, W, H);
-      const data = img.data;
-      const rmp = ramp();
-      for (let i = 0; i < data.length; i += 4) {
-        const a = data[i + 3];
-        if (!a) continue;
-        const idx = Math.min(255, a) * 4;
-        data[i] = rmp[idx];
-        data[i + 1] = rmp[idx + 1];
-        data[i + 2] = rmp[idx + 2];
-        data[i + 3] = Math.min(235, a + 40);
+      function draw(id, cfg, hasData, emptyKey) {
+        var el = document.getElementById(id);
+        var em = document.querySelector('[data-empty="' + emptyKey + '"]');
+        if (em) em.hidden = hasData;
+        if (!el || !window.Chart) return;
+        if (charts[id]) charts[id].destroy();
+        if (!hasData) return;
+        charts[id] = new Chart(el, cfg);
       }
-      ctx.putImageData(img, 0, 0);
-    }
+      function axisOpts(horizontal) {
+        return {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: horizontal ? true : false, color: COL.line }, ticks: { color: COL.ink, precision: 0 } },
+            y: { grid: { color: COL.line }, beginAtZero: true, ticks: { color: COL.ink, precision: 0 } }
+          }
+        };
+      }
 
-    let currentDev = 'todos';
-    async function loadHeatmap() {
-      try {
-        const r = await fetch('/api/heatmap?device=' + currentDev);
-        if (!r.ok) return;
-        const { puntos } = await r.json();
-        drawHeat(puntos || []);
-      } catch { /* nada */ }
-    }
+      function renderCharts(d) {
+        var dia = d.porDia || [];
+        draw('chartDia', {
+          type: 'line',
+          data: { labels: dia.map(function (x) { return (x.day || '').slice(5); }),
+            datasets: [{ label: 'Visitas', data: dia.map(function (x) { return x.n; }),
+              borderColor: COL.sage, backgroundColor: 'rgba(126,150,112,0.15)', fill: true, tension: 0.35,
+              pointRadius: 3, pointBackgroundColor: COL.sage, borderWidth: 2 }] },
+          options: axisOpts(false)
+        }, dia.length > 0, 'dia');
 
-    document.querySelectorAll('[data-dev]').forEach((b) => {
-      b.addEventListener('click', () => {
-        document.querySelectorAll('[data-dev]').forEach((x) => x.classList.remove('is-on'));
-        b.classList.add('is-on');
-        currentDev = b.dataset.dev;
-        loadHeatmap();
+        var disp = d.porDispositivo || [];
+        draw('chartDisp', {
+          type: 'doughnut',
+          data: { labels: disp.map(function (x) { return x.device === 'mobile' ? 'Móvil' : 'Escritorio'; }),
+            datasets: [{ data: disp.map(function (x) { return x.n; }), backgroundColor: [COL.terr, COL.sage], borderWidth: 0 }] },
+          options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { color: COL.ink } } } }
+        }, disp.length > 0, 'disp');
+
+        var sec = d.porSeccion || [];
+        draw('chartSec', {
+          type: 'bar',
+          data: { labels: sec.map(function (x) { return x.section; }),
+            datasets: [{ label: 'Clicks', data: sec.map(function (x) { return x.n; }), backgroundColor: COL.terr, borderRadius: 6 }] },
+          options: Object.assign(axisOpts(true), { indexAxis: 'y' })
+        }, sec.length > 0, 'sec');
+      }
+
+      function renderComments(list) {
+        var ml = document.querySelector('[data-modlist]');
+        ml.innerHTML = '';
+        if (!list.length) { ml.innerHTML = '<p class="muted">Aún no hay comentarios.</p>'; return; }
+        list.forEach(function (c) {
+          var el = document.createElement('div'); el.className = 'mod';
+          var top = document.createElement('div'); top.className = 'mod__top';
+          var meta = document.createElement('div');
+          var nm = document.createElement('span'); nm.className = 'mod__name'; nm.textContent = c.name;
+          var dt = document.createElement('span'); dt.className = 'mod__date'; dt.textContent = '  ' + new Date(c.ts).toLocaleString('es-EC');
+          meta.appendChild(nm); meta.appendChild(dt);
+          var del = document.createElement('button'); del.className = 'mod__del'; del.textContent = 'Eliminar';
+          del.addEventListener('click', function () {
+            if (!confirm('¿Eliminar este comentario?')) return;
+            fetch('/api/moderar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: c.id }) }).then(load);
+          });
+          top.appendChild(meta); top.appendChild(del);
+          var tx = document.createElement('p'); tx.className = 'mod__text'; tx.textContent = c.body;
+          el.appendChild(top); el.appendChild(tx);
+          ml.appendChild(el);
+        });
+      }
+
+      function load() {
+        return fetch('/api/stats').then(function (r) { if (!r.ok) return null; return r.json(); }).then(function (d) {
+          if (!d) return;
+          ['visitas', 'visitantes', 'comentarios', 'likes', 'clicks'].forEach(function (k) {
+            var e = document.querySelector('[data-p="' + k + '"]'); if (e) e.textContent = nf(d[k]);
+          });
+          var cc = document.querySelector('[data-cc]'); if (cc) cc.textContent = '(' + nf(d.comentarios) + ')';
+          renderCharts(d);
+          renderComments(d.comentarios_lista || []);
+        }).catch(function () {});
+      }
+
+      /* ---- Mapa de calor (canvas propio) ---- */
+      var rampCache = null;
+      function ramp() {
+        if (rampCache) return rampCache;
+        var c = document.createElement('canvas'); c.width = 256; c.height = 1;
+        var x = c.getContext('2d');
+        var g = x.createLinearGradient(0, 0, 256, 0);
+        g.addColorStop(0.0, '#2c6fb0'); g.addColorStop(0.35, '#38b06f'); g.addColorStop(0.6, '#e7c93a');
+        g.addColorStop(0.8, '#d8632f'); g.addColorStop(1.0, '#c62d2d');
+        x.fillStyle = g; x.fillRect(0, 0, 256, 1);
+        rampCache = x.getImageData(0, 0, 256, 1).data; return rampCache;
+      }
+      function drawHeat(points) {
+        var wrap = document.querySelector('[data-heat-wrap]');
+        var canvas = document.querySelector('[data-heat]');
+        var empty = document.querySelector('[data-heat-empty]');
+        var W = Math.max(320, Math.round(wrap.clientWidth));
+        var H = Math.round(W * 1.5);
+        canvas.width = W; canvas.height = H;
+        var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, W, H);
+        empty.hidden = points.length > 0;
+        if (!points.length) return;
+        var r = Math.max(16, Math.round(W * 0.035));
+        ctx.globalCompositeOperation = 'lighter';
+        points.forEach(function (p) {
+          var x = p.x * W, y = p.y * H;
+          var grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+          grad.addColorStop(0, 'rgba(0,0,0,0.16)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.globalCompositeOperation = 'source-over';
+        var img = ctx.getImageData(0, 0, W, H); var data = img.data; var rmp = ramp();
+        for (var i = 0; i < data.length; i += 4) {
+          var a = data[i + 3]; if (!a) continue;
+          var idx = Math.min(255, a) * 4;
+          data[i] = rmp[idx]; data[i + 1] = rmp[idx + 1]; data[i + 2] = rmp[idx + 2];
+          data[i + 3] = Math.min(235, a + 40);
+        }
+        ctx.putImageData(img, 0, 0);
+      }
+      var currentDev = 'todos';
+      function loadHeatmap() {
+        fetch('/api/heatmap?device=' + currentDev).then(function (r) { if (!r.ok) return null; return r.json(); })
+          .then(function (d) { if (d) drawHeat(d.puntos || []); }).catch(function () {});
+      }
+      document.querySelectorAll('[data-dev]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('[data-dev]').forEach(function (x) { x.classList.remove('is-on'); });
+          b.classList.add('is-on'); currentDev = b.dataset.dev; loadHeatmap();
+        });
       });
-    });
+      var rt;
+      window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(loadHeatmap, 250); });
 
-    let rt;
-    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(loadHeatmap, 250); });
-
-    loadStats();
-    loadHeatmap();
-    setInterval(loadStats, 30000);
+      load(); loadHeatmap();
+      setInterval(load, 30000);
+    })();
   </script>
 </Layout>
