@@ -26,6 +26,7 @@ export function initApp() {
   // La lógica funcional se activa siempre (con o sin animación).
   setupNav();
   setupVideos();
+  setupAudios();
   setupGallery();
   setupContactForm();
   setupShare();
@@ -316,6 +317,20 @@ function setupVideos() {
         e.preventDefault();
         play();
       }
+    });
+  });
+}
+
+/* --------------------------------------------------------------------- Audios */
+/* Reproductores de audio (entrevistas): solo suena uno a la vez. */
+function setupAudios() {
+  const players = $$('[data-audio]');
+  if (!players.length) return;
+  players.forEach((audio) => {
+    audio.addEventListener('play', () => {
+      players.forEach((other) => {
+        if (other !== audio && !other.paused) other.pause();
+      });
     });
   });
 }

@@ -1,40 +1,9 @@
 ---
-import { fuentes } from '../data/reportaje.js';
+/*
+ * Componente en desuso.
+ * La antigua sección "Fuentes y referencias" se sustituyó por la sección
+ * "Entrevistas" (ver Entrevistas.astro), que reúne las entrevistas en audio
+ * y la entrevista escrita. Este archivo se mantiene inerte para no romper
+ * nada; ya no se importa en index.astro.
+ */
 ---
-
-<section class="section" id="fuentes">
-  <div class="container">
-    <div class="section__head" data-reveal>
-      <p class="rule">05 · Fuentes y referencias</p>
-      <h2>De dónde viene esta historia</h2>
-      <p class="section__lead">
-        Todas las entrevistas y materiales consultados para elaborar el reportaje.
-      </p>
-    </div>
-
-    <div class="fuentes__list">
-      {fuentes.entrevistas.map((f, i) => (
-        <a class="fuente" href={f.url} target="_blank" rel="noopener noreferrer" data-reveal>
-          <span class="fuente__idx">{String(i + 1).padStart(2, '0')}</span>
-          <span class="fuente__txt">
-            <strong>{f.etiqueta}</strong>
-            <span>«{f.titulo}»</span>
-          </span>
-          <span class="fuente__go">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
-          </span>
-        </a>
-      ))}
-
-      {fuentes.otras.map((f, i) => (
-        <div class="fuente" data-reveal>
-          <span class="fuente__idx">{String(fuentes.entrevistas.length + i + 1).padStart(2, '0')}</span>
-          <span class="fuente__txt">
-            <strong>{f.texto}</strong>
-            <span>Referencia documental</span>
-          </span>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>

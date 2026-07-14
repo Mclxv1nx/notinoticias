@@ -1,0 +1,113 @@
+---
+import { entrevistaAudio, audiosJovenes, entrevistaEscrita } from '../data/reportaje.js';
+---
+
+<section class="section" id="entrevistas">
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">05 · Entrevistas</p>
+      <h2>En sus propias palabras</h2>
+      <p class="section__lead">
+        Las voces del reportaje, en audio y en texto: un maestro escultor respondiendo
+        pregunta por pregunta, los testimonios de jóvenes del pueblo y una entrevista escrita.
+      </p>
+    </div>
+
+    <!-- ============================ ENTREVISTA EN AUDIO (maestro, por preguntas) -->
+    <div class="entrevista-audio" data-reveal>
+      <div class="entrevista-audio__intro">
+        <p class="eyebrow">Entrevista en audio</p>
+        <h3>{entrevistaAudio.titulo}</h3>
+        <p>{entrevistaAudio.intro}</p>
+      </div>
+
+      <ol class="audio-preguntas">
+        {entrevistaAudio.preguntas.map((q) => (
+          <li class="audio-q" data-reveal>
+            <div class="audio-q__head">
+              <span class="audio-q__num">{String(q.n).padStart(2, '0')}</span>
+              <p class="audio-q__text">{q.pregunta}</p>
+            </div>
+            <audio
+              class="audio-q__player"
+              controls
+              preload="none"
+              data-audio
+              aria-label={`Audio de la respuesta a la pregunta ${q.n}`}
+            >
+              <source src={q.audio} type="audio/mpeg" />
+              Tu navegador no admite la reproducción de audio.
+            </audio>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <!-- ============================================ TESTIMONIOS DE JÓVENES (audio) -->
+    <div class="section__head" data-reveal style="margin-top: clamp(3rem, 7vw, 5rem)">
+      <p class="rule">Jóvenes</p>
+      <h2 style="font-size: var(--step-3)">{audiosJovenes.titulo}</h2>
+      <p class="section__lead">{audiosJovenes.intro}</p>
+    </div>
+
+    <div class="jovenes-audio">
+      {audiosJovenes.pistas.map((p) => (
+        <article class="joven-card" data-reveal data-tilt data-tilt-max="4">
+          <div class="joven-card__top">
+            <span class="joven-card__badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/>
+              </svg>
+            </span>
+            <div>
+              <p class="eyebrow">{p.etiqueta}</p>
+              <h4>{p.titulo}</h4>
+            </div>
+          </div>
+          <p class="joven-card__desc">{p.descripcion}</p>
+          <audio
+            class="audio-q__player"
+            controls
+            preload="none"
+            data-audio
+            aria-label={`Audio del testimonio: ${p.titulo}`}
+          >
+            <source src={p.audio} type="audio/mpeg" />
+            Tu navegador no admite la reproducción de audio.
+          </audio>
+        </article>
+      ))}
+    </div>
+
+    <!-- ============================================ ENTREVISTA ESCRITA (acordeón) -->
+    <div class="section__head" data-reveal style="margin-top: clamp(3rem, 7vw, 5rem)">
+      <p class="rule">Entrevista escrita</p>
+      <h2 style="font-size: var(--step-3)">{entrevistaEscrita.titulo}</h2>
+    </div>
+
+    <div class="entrevista-escrita" data-reveal>
+      <div class="entrevista-escrita__persona">
+        <span class="entrevista-escrita__avatar">{entrevistaEscrita.persona.nombre.charAt(0)}</span>
+        <div>
+          <p class="entrevista-escrita__nombre">{entrevistaEscrita.persona.nombre}</p>
+          <p class="entrevista-escrita__detalle">{entrevistaEscrita.persona.detalle}</p>
+        </div>
+      </div>
+      <p class="entrevista-escrita__intro">{entrevistaEscrita.intro}</p>
+
+      <div class="qa-list">
+        {entrevistaEscrita.qa.map((item, i) => (
+          <details class="qa" open={i === 0}>
+            <summary class="qa__q">
+              <span class="qa__idx">{String(i + 1).padStart(2, '0')}</span>
+              <span class="qa__q-text">{item.pregunta}</span>
+              <svg class="qa__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="qa__a"><p>{item.respuesta}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

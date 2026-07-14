@@ -395,7 +395,40 @@ p {
   padding-bottom: 3rem;
   overflow: hidden;
 }
+
+/* Fondo ilustrado del parque (solo en la portada). Detrás de todo el contenido,
+   con tinte cálido para integrarse con la paleta crema y un desvanecido inferior
+   que lo funde con el resto de la página. */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/images/background-inicio.jpg') center 18% / cover no-repeat;
+  /* Baja opacidad + tinte cálido para no competir con el texto gris ni con la paleta. */
+  opacity: 0.20;
+  filter: sepia(0.4) saturate(1.15) brightness(1.06) contrast(0.98);
+  /* Desvanecido hacia abajo: se integra con la página. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 70%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 70%);
+  pointer-events: none;
+  will-change: opacity;
+}
+/* Velo crema desde la esquina superior izquierda: mantiene legible el texto de la
+   portada tanto en móvil (texto arriba) como en escritorio (texto a la izquierda). */
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    158deg,
+    var(--cream) 8%,
+    color-mix(in srgb, var(--cream) 52%, transparent) 44%,
+    transparent 78%
+  );
+}
 .hero__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
@@ -791,13 +824,13 @@ p {
 
 /* Galería */
 .galeria {
-  columns: 1;
-  column-gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
 }
 .galeria__item {
-  break-inside: avoid;
-  margin-bottom: 1rem;
   position: relative;
+  aspect-ratio: 4 / 3;
   border-radius: var(--radius-sm);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -805,6 +838,8 @@ p {
 }
 .galeria__item img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.6s var(--ease);
 }
 .galeria__item:hover img {
@@ -1500,13 +1535,346 @@ p {
   box-shadow: 0 2px 8px -2px rgba(58, 56, 48, 0.5);
 }
 
+/* ========================================================= ENTREVISTAS (audio) */
+.entrevista-audio__intro {
+  max-width: 60ch;
+  margin-bottom: clamp(1.6rem, 4vw, 2.4rem);
+}
+.entrevista-audio__intro h3 {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  margin: 0.3rem 0 0.6rem;
+}
+.entrevista-audio__intro p {
+  color: var(--ink-soft);
+}
+
+.audio-preguntas {
+  display: grid;
+  gap: 1rem;
+  counter-reset: none;
+}
+.audio-q {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--sage-soft);
+  transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.audio-q:hover {
+  border-left-color: var(--terracotta);
+}
+.audio-q__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+.audio-q__num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--terracotta-deep);
+  background: color-mix(in srgb, var(--blush) 60%, transparent);
+  border-radius: var(--radius-sm);
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.audio-q__text {
+  font-weight: 600;
+  color: var(--ink);
+  align-self: center;
+}
+
+/* Reproductor de audio nativo (accesible, con controles del navegador) */
+.audio-q__player {
+  width: 100%;
+  height: 44px;
+  border-radius: 100px;
+  background: var(--cream-2);
+  outline: none;
+  accent-color: var(--sage-deep);
+}
+.audio-q__player::-webkit-media-controls-panel {
+  background: var(--cream-2);
+}
+
+/* Testimonios de jóvenes */
+.jovenes-audio {
+  display: grid;
+  gap: 1.2rem;
+}
+.joven-card {
+  background: color-mix(in srgb, var(--sage-soft) 22%, var(--cream));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.3rem, 3.5vw, 1.9rem);
+  box-shadow: var(--shadow-sm);
+}
+.joven-card__top {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+.joven-card__badge {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  background: var(--sage-deep);
+}
+.joven-card__top h4 {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  margin: 0.1rem 0 0;
+}
+.joven-card__desc {
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+
+/* ==================================================== ENTREVISTA ESCRITA (acordeón) */
+.entrevista-escrita {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+  box-shadow: var(--shadow-sm);
+}
+.entrevista-escrita__persona {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.entrevista-escrita__avatar {
+  width: 54px;
+  height: 54px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--terracotta), var(--terracotta-deep));
+}
+.entrevista-escrita__nombre {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+.entrevista-escrita__detalle {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+.entrevista-escrita__intro {
+  color: var(--ink-soft);
+  margin: 1.1rem 0 0.4rem;
+  max-width: 62ch;
+}
+.qa-list {
+  margin-top: 0.8rem;
+}
+.qa {
+  border-top: 1px solid var(--line);
+}
+.qa:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.qa__q {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0.9rem;
+  padding: 1.1rem 0.2rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  color: var(--ink);
+  transition: color 0.25s var(--ease);
+}
+.qa__q::-webkit-details-marker { display: none; }
+.qa__q:hover { color: var(--sage-ink); }
+.qa__idx {
+  font-family: var(--font-display);
+  color: var(--terracotta-deep);
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+.qa__q-text { align-self: center; }
+.qa__chevron {
+  color: var(--sage-deep);
+  margin-top: 3px;
+  transition: transform 0.3s var(--ease);
+  flex: none;
+}
+.qa[open] .qa__chevron { transform: rotate(180deg); }
+.qa__a {
+  padding: 0 0.2rem 1.2rem calc(1.1rem + 0.9rem);
+  color: var(--ink-soft);
+}
+.qa[open] .qa__a {
+  animation: qa-in 0.35s var(--ease);
+}
+@keyframes qa-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================ CONCLUSIONES */
+.conclusiones {
+  position: relative;
+  background: color-mix(in srgb, var(--sage-soft) 26%, var(--cream));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.8rem, 5vw, 3.2rem);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.conclusiones__mark {
+  position: absolute;
+  top: -0.6rem;
+  left: 1.2rem;
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 18vw, 11rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--sage-deep) 22%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+.conclusiones__body {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  max-width: 66ch;
+}
+.conclusiones__body p {
+  font-size: var(--step-1);
+  color: var(--ink);
+}
+.conclusiones__autoria {
+  position: relative;
+  margin-top: clamp(1.6rem, 4vw, 2.4rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+.autores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+.autor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.autor__inicial {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--white);
+  background: var(--sage-deep);
+}
+
+/* ================================================= FONDOS DE SECCIÓN (portada) */
+/* Mismo efecto que el hero, pero para secciones intermedias: el dibujo se
+   desvanece por arriba y por abajo para fundirse con la página. */
+.section--bg { position: relative; }
+.section--bg > .container {
+  position: relative;
+  z-index: 1;
+}
+.section-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.12;
+  filter: sepia(0.4) saturate(1.15) brightness(1.06) contrast(0.98);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 74%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 74%, transparent 100%);
+  pointer-events: none;
+}
+/* Velo crema que suaviza el centro para mantener legible el contenido. */
+.section-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    130% 100% at 50% 45%,
+    transparent 0%,
+    color-mix(in srgb, var(--cream) 42%, transparent) 68%,
+    color-mix(in srgb, var(--cream) 72%, transparent) 100%
+  );
+}
+.section-bg--galeria {
+  background-image: url('/images/background-galeria.jpg');
+}
+.section-bg--conclusiones {
+  background-image: url('/images/background-conclusiones.jpg');
+}
+
+/* ========================================================= BARRA DE SCROLL */
+/* Se oculta la barra pesada por defecto y se sustituye por una fina y elegante,
+   acorde a la paleta (salvia → terracota al pasar el cursor). */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sage-deep) transparent;
+}
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+  background-color: var(--sage-deep);
+  background-image: linear-gradient(180deg, var(--sage-deep), var(--sage-ink));
+  transition: background-color 0.3s var(--ease);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-image: linear-gradient(180deg, var(--terracotta), var(--terracotta-deep));
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 /* ============================================================ RESPONSIVE */
 @media (min-width: 620px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
-  .galeria { columns: 2; }
+  .galeria { grid-template-columns: repeat(2, 1fr); }
   .videos { grid-template-columns: repeat(2, 1fr); }
   .comentarios__row { grid-template-columns: 1fr 1fr; }
   .live { grid-template-columns: repeat(4, 1fr); }
+  .jovenes-audio { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (min-width: 900px) {
@@ -1522,7 +1890,7 @@ p {
   .contacto { grid-template-columns: 1fr; align-items: start; }
   .footer__grid { grid-template-columns: 1.4fr 1fr 1fr; }
   .stats { grid-template-columns: repeat(4, 1fr); }
-  .galeria { columns: 3; }
+  .galeria { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (min-width: 1200px) {

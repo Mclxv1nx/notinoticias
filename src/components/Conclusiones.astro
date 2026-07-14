@@ -1,0 +1,33 @@
+---
+import { conclusiones } from '../data/reportaje.js';
+const autores = conclusiones.autoria.split('·').map((n) => n.trim());
+---
+
+<section class="section section--bg" id="conclusiones">
+  <div class="section-bg section-bg--conclusiones" aria-hidden="true"></div>
+  <div class="container">
+    <div class="section__head" data-reveal>
+      <p class="rule">06 · Cierre</p>
+      <h2>{conclusiones.titulo}</h2>
+    </div>
+
+    <div class="conclusiones" data-reveal data-tilt data-tilt-max="3">
+      <span class="conclusiones__mark" aria-hidden="true">&ldquo;</span>
+      <div class="conclusiones__body">
+        {conclusiones.parrafos.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div class="conclusiones__autoria">
+        <p class="eyebrow">Autoría del reportaje</p>
+        <ul class="autores">
+          {autores.map((a) => (
+            <li class="autor">
+              <span class="autor__inicial">{a.charAt(0)}</span>
+              <span>{a}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

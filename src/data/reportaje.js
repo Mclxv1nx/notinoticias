@@ -37,7 +37,8 @@ export const navegacion = [
   { id: 'multimedia', etiqueta: 'Multimedia' },
   { id: 'estadisticas', etiqueta: 'Datos' },
   { id: 'proyecto', etiqueta: 'El proyecto' },
-  { id: 'fuentes', etiqueta: 'Fuentes' },
+  { id: 'entrevistas', etiqueta: 'Entrevistas' },
+  { id: 'conclusiones', etiqueta: 'Conclusiones' },
   { id: 'contacto', etiqueta: 'Contacto' },
 ];
 
@@ -169,6 +170,13 @@ export const galeria = [
   { src: '/images/stand-artesanias-2.jpg', alt: 'Stand de artesanías de madera.', caption: 'Galerías y stands abiertos al visitante.' },
   { src: '/images/stand-artesania.jpg', alt: 'Piezas de artesanía en madera.', caption: 'Del santo religioso a la figura decorativa.' },
   { src: '/images/escultura-colega.jpg', alt: 'Reportero del grupo mostrando una artesanía de madera.', caption: 'Reportero del grupo mostrando una artesanía.' },
+  { src: '/images/escultura-tallada.jpg', alt: 'Escultura de madera tallada a mano.', caption: 'El detalle del tallado, hecho a mano.' },
+  { src: '/images/escultura-tallada-2.jpg', alt: 'Escultura de madera tallada a mano.', caption: 'Cada pieza guarda horas de gubia y paciencia.' },
+  { src: '/images/esculturas.jpg', alt: 'Conjunto de esculturas de madera.', caption: 'De la figura pequeña a la de gran formato.' },
+  { src: '/images/artesania-mecanica.jpg', alt: 'Herramientas y proceso de la artesanía en madera.', caption: 'La herramienta al servicio del oficio.' },
+  { src: '/images/mural.jpg', alt: 'Mural de San Antonio de Ibarra.', caption: 'El arte también se asoma en los muros del pueblo.' },
+  { src: '/images/letras-san-antonio.jpg', alt: 'Letras monumentales de San Antonio en el parque central.', caption: 'Las letras de San Antonio, punto de encuentro del pueblo.' },
+  { src: '/images/letras-aerea.jpg', alt: 'Vista aérea del parque central de San Antonio de Ibarra.', caption: 'El parque central visto desde lo alto.' },
 ];
 
 /* ----------------------------------------------------------------------------
@@ -214,31 +222,178 @@ export const proyecto = {
 };
 
 /* ----------------------------------------------------------------------------
- * Fuentes y referencias
+ * ENTREVISTA EN AUDIO a un maestro escultor  (formato por preguntas)
+ * Cada pregunta tiene su propio audio (MP3 ligero en /public/audio).
  * -------------------------------------------------------------------------- */
-export const fuentes = {
-  entrevistas: artesanos.map((a) => ({
-    etiqueta: `Entrevista N.º ${a.numero} — ${a.nombre}`,
-    titulo: a.titular,
-    url: a.videoUrl,
-  })),
-  otras: [
-    { texto: 'Documentación de contexto sobre San Antonio de Ibarra.', url: null }, // ← reemplazar
-    { texto: 'Bibliografía y artículos consultados.', url: null }, // ← reemplazar
+export const entrevistaAudio = {
+  titulo: 'La voz de un maestro escultor',
+  intro:
+    'Un recorrido, pregunta por pregunta, por la vida y el oficio de un escultor de ' +
+    'San Antonio de Ibarra. Cada respuesta puede escucharse en su voz original.',
+  preguntas: [
+    {
+      n: 1,
+      pregunta: '¿Cuánto tiempo lleva dedicándose a la artesanía y a la escultura?',
+      audio: '/audio/pregunta-1.mp3',
+    },
+    {
+      n: 2,
+      pregunta:
+        '¿En qué ciudades o países ha tenido la oportunidad de exponer o llevar sus ' +
+        'obras, y podría compartirnos la historia detrás de alguna de las piezas que más recuerda?',
+      audio: '/audio/pregunta-2.mp3',
+    },
+    {
+      n: 3,
+      pregunta: '¿Cómo fueron sus inicios en el mundo de la artesanía y la escultura?',
+      audio: '/audio/pregunta-3.mp3',
+    },
+    {
+      n: 4,
+      pregunta:
+        '¿Cómo ve actualmente el panorama de la artesanía y la escultura en San Antonio de Ibarra?',
+      audio: '/audio/pregunta-4.mp3',
+    },
+    {
+      n: 5,
+      pregunta: '¿Ha transmitido este oficio a otras personas?',
+      audio: '/audio/pregunta-5.mp3',
+    },
+    {
+      n: 6,
+      pregunta:
+        '¿Cómo recuerda los años dorados de la escultura aquí en San Antonio? ¿Podría ' +
+        'decirnos quiénes fueron esos compañeros que lo acompañaron en su tiempo y qué tan ' +
+        'exigente era dedicarse a este arte?',
+      audio: '/audio/pregunta-6.mp3',
+    },
   ],
+};
+
+/* ----------------------------------------------------------------------------
+ * TESTIMONIOS EN AUDIO de jóvenes de San Antonio de Ibarra
+ * -------------------------------------------------------------------------- */
+export const audiosJovenes = {
+  titulo: 'La mirada de los jóvenes',
+  intro:
+    'Dos jóvenes de San Antonio de Ibarra cuentan cómo ven la tradición del tallado ' +
+    'en madera y su lugar dentro del pueblo.',
+  pistas: [
+    {
+      etiqueta: 'Testimonio 01',
+      titulo: 'Kevin García',
+      descripcion: 'Su mirada sobre el oficio, el pueblo y la herencia de los talladores.',
+      audio: '/audio/jovenes-1.mp3',
+    },
+    {
+      etiqueta: 'Testimonio 02',
+      titulo: 'Santiago Almeida',
+      descripcion: 'La tradición vista desde una nueva generación de sanantonenses.',
+      audio: '/audio/jovenes-2.mp3',
+    },
+  ],
+};
+
+/* ----------------------------------------------------------------------------
+ * ENTREVISTA ESCRITA a un joven ciudadano  (acordeón interactivo)
+ * -------------------------------------------------------------------------- */
+export const entrevistaEscrita = {
+  titulo: 'En sus propias palabras',
+  persona: {
+    nombre: 'Ángel Maldonado',
+    detalle: '20 años · 5 años viviendo en San Antonio de Ibarra',
+  },
+  intro:
+    'Ángel Maldonado comparte su mirada sobre el «pueblo mágico», los talleres de su ' +
+    'familia y el futuro del tallado en madera. Pulsa cada pregunta para leer su respuesta.',
+  qa: [
+    {
+      pregunta: '¿Podría decirnos su nombre, edad y cuánto tiempo lleva viviendo en San Antonio de Ibarra?',
+      respuesta:
+        'Mi nombre es Ángel Maldonado, tengo 20 años y llevo 5 años viviendo en San Antonio.',
+    },
+    {
+      pregunta:
+        'Cuando escucha que este lugar es conocido como «pueblo mágico» o «cuna de artistas», ¿qué siente o qué piensa?',
+      respuesta:
+        'La verdad, cuando escucho eso es como pensar que es un lugar mágico, que aquí es donde ' +
+        'nace gente con talento para la realización del tallado de madera.',
+    },
+    {
+      pregunta: '¿Qué opinión tiene sobre los artesanos y el tallado en madera?',
+      respuesta:
+        'La verdad, los artesanos son gente que lleva mucho tiempo en esta profesión. Me impresionan ' +
+        'los tallados que realizan; las esculturas, desde las grandes hasta las más pequeñas, son interesantes.',
+    },
+    {
+      pregunta: '¿Conoce la historia de esta tradición en San Antonio?',
+      respuesta:
+        'Siendo sincero, yo no sabía la historia de cómo nació esta tradición, pero al conocerla me ' +
+        'gustó mucho ver cómo fue evolucionando en todo San Antonio.',
+    },
+    {
+      pregunta: '¿Ha visitado alguna vez un taller artesanal?',
+      respuesta:
+        'Sí lo he hecho. En la casa de mi tío, una vez tenía que entregar una tarea del colegio: me ' +
+        'mandaron hacer una manzana en madera. Cuando entré al taller, me quedé impresionado de cómo ' +
+        'se hace el tallado de madera.',
+    },
+    {
+      pregunta: '¿Conoce o tiene algún familiar, amigo o vecino que se dedique a este oficio?',
+      respuesta:
+        'Tenía dos tíos que se dedicaban al tallado de madera, mi tío Guillermo y Oswaldo; ellos ' +
+        'realizan el tallado de madera.',
+    },
+    {
+      pregunta: '¿Usted, como joven, tendría interés en aprender esta tradición?',
+      respuesta:
+        'Diría que no, porque nunca me ha llamado la atención aprender a hacer esculturas y el tallado de madera.',
+    },
+    {
+      pregunta: '¿Cree que los jóvenes están interesados en continuar esta tradición?',
+      respuesta:
+        'En estos tiempos ya no hay quienes se interesen por esta tradición, y me incluyo: en la ' +
+        'actualidad los jóvenes no tienen interés sobre esta tradición.',
+    },
+    {
+      pregunta: '¿Qué cree que debería hacerse para preservar esta tradición?',
+      respuesta:
+        'En mi opinión, es importante enseñar el tallado en madera desde las escuelas y colegios, ' +
+        'organizar talleres para los jóvenes, apoyar a los artesanos con más promoción y crear ' +
+        'espacios donde puedan exhibir y vender sus obras.',
+    },
+  ],
+};
+
+/* ----------------------------------------------------------------------------
+ * Conclusiones y autoría del reportaje
+ * -------------------------------------------------------------------------- */
+export const conclusiones = {
+  titulo: 'Conclusiones',
+  parrafos: [
+    'San Antonio de Ibarra es un símbolo de identidad, creatividad y tradición, cuyo legado ha ' +
+      'trascendido generaciones y ha dado reconocimiento nacional e internacional a la comunidad.',
+    'No obstante, el relevo generacional representa uno de los principales desafíos para la ' +
+      'continuidad de este patrimonio. Preservar la artesanía requiere adaptarse a los cambios ' +
+      'sociales y tecnológicos sin perder la esencia que la caracteriza. Solo así esta tradición ' +
+      'podrá mantenerse viva y continuar siendo un referente cultural para las futuras generaciones.',
+    'Agradecemos a los artesanos y escultores de San Antonio de Ibarra por compartir su tiempo, ' +
+      'experiencias y conocimientos, haciendo posible la realización de este reportaje.',
+  ],
+  autoria: 'Anahí Chantera · Darío Santacruz · Jesús Escola · Ángel Maldonado · Andy Tabango',
 };
 
 /* ----------------------------------------------------------------------------
  * Contacto y redes sociales
  * -------------------------------------------------------------------------- */
 export const contacto = {
-  // Correo interno de referencia (no se muestra en el sitio). Momentáneo.
-  email: 'gachanterap@utn.edu.ec',
+  email: 'notiinoticias@gmail.com',
   mensaje: 'Sigue el trabajo de notinoticias y descubre más historias en nuestras redes:',
   redes: [
     { nombre: 'YouTube', url: 'https://www.youtube.com/@notinoticias-r5z', icono: 'youtube' },
     { nombre: 'Instagram', url: 'https://www.instagram.com/notiinoticias/', icono: 'instagram' },
-    // TikTok: aún no hay cuenta. Cuando exista, agrega aquí:
-    // { nombre: 'TikTok', url: 'https://www.tiktok.com/@tu_usuario', icono: 'tiktok' },
+    { nombre: 'Facebook', url: 'https://www.facebook.com/share/1EPcq1rAYk/', icono: 'facebook' },
+    { nombre: 'X', url: 'https://x.com/notiinoticias', icono: 'x' },
+    { nombre: 'TikTok', url: 'https://www.tiktok.com/@notiinoticias', icono: 'tiktok' },
   ],
 };
