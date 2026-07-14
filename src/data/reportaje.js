@@ -176,7 +176,7 @@ export const galeria = [
   { src: '/images/artesania-mecanica.jpg', alt: 'Herramientas y proceso de la artesanía en madera.', caption: 'La herramienta al servicio del oficio.' },
   { src: '/images/mural.jpg', alt: 'Mural de San Antonio de Ibarra.', caption: 'El arte también se asoma en los muros del pueblo.' },
   { src: '/images/letras-san-antonio.jpg', alt: 'Letras monumentales de San Antonio en el parque central.', caption: 'Las letras de San Antonio, punto de encuentro del pueblo.' },
-  { src: '/images/letras-aerea.jpg', alt: 'Vista aérea del parque central de San Antonio de Ibarra.', caption: 'El parque central visto desde lo alto.' },
+  { src: '/images/mural-tren.jpg', alt: 'Mural callejero de San Antonio de Ibarra: un rostro tallado, el volcán Imbabura y el tren histórico.', caption: 'Mural del pueblo: memoria, paisaje y el ferrocarril.' },
 ];
 
 /* ----------------------------------------------------------------------------
