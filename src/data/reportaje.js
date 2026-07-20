@@ -110,7 +110,7 @@ export const artesanos = [
   },
   {
     numero: 2,
-    nombre: 'Luis Emiliano Praire Martínez',
+    nombre: 'Luis Emiliano Freire Martínez',
     titular: '45 años de historia y pasión por la madera',
     trayectoria: 45,
     imagen: '/images/luis-praire.jpg',
