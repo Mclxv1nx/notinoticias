@@ -81,7 +81,12 @@ import { reportaje, artesanos } from "../data/reportaje.js";
                 )}
                 <span class="chip">Tallado en madera</span>
               </div>
-              <a class="maestro__watch" href={`#video-${a.numero}`}>
+              <button
+                class="maestro__watch"
+                type="button"
+                data-yt-modal={a.videoId}
+                aria-label={`Ver entrevista completa de ${a.nombre}`}
+              >
                 Ver la entrevista completa
                 <svg
                   width="18"
@@ -96,11 +101,21 @@ import { reportaje, artesanos } from "../data/reportaje.js";
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
-              </a>
+              </button>
             </div>
           </article>
         ))
       }
+    </div>
+  </div>
+
+  <!-- Modal de YouTube (reutilizable) -->
+  <div class="yt-modal" data-yt-overlay aria-hidden="true" role="dialog" aria-label="Video de la entrevista">
+    <div class="yt-modal__box">
+      <button class="yt-modal__close" data-yt-close type="button" aria-label="Cerrar video">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="yt-modal__frame" data-yt-frame></div>
     </div>
   </div>
 </section>

@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
 export const prerender = false;
 ---
@@ -17,21 +17,111 @@ export const prerender = false;
       </div>
     </header>
 
-    <!-- Métricas principales -->
+    <!-- Métricas principales (cards con ícono) -->
     <section class="metrics" aria-label="Métricas">
-      <div class="metric"><span class="metric__n" data-p="visitas">—</span><span class="metric__l">Visitas totales</span></div>
-      <div class="metric"><span class="metric__n" data-p="visitantes">—</span><span class="metric__l">Visitantes únicos</span></div>
-      <div class="metric"><span class="metric__n" data-p="comentarios">—</span><span class="metric__l">Comentarios</span></div>
-      <div class="metric"><span class="metric__n" data-p="likes">—</span><span class="metric__l">Me gusta</span></div>
-      <div class="metric"><span class="metric__n" data-p="clicks">—</span><span class="metric__l">Clicks / taps</span></div>
+      <div class="metric metric--sage">
+        <div class="metric__icon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+            ></path><circle cx="12" cy="12" r="3"></circle></svg
+          >
+        </div>
+        <span class="metric__n" data-p="visitas">—</span>
+        <span class="metric__l">Visitas totales</span>
+      </div>
+      <div class="metric metric--terr">
+        <div class="metric__icon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle
+              cx="9"
+              cy="7"
+              r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path
+              d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
+          >
+        </div>
+        <span class="metric__n" data-p="visitantes">—</span>
+        <span class="metric__l">Visitantes únicos</span>
+      </div>
+      <div class="metric metric--blue">
+        <div class="metric__icon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path></svg
+          >
+        </div>
+        <span class="metric__n" data-p="comentarios">—</span>
+        <span class="metric__l">Comentarios</span>
+      </div>
+      <div class="metric metric--rose">
+        <div class="metric__icon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+              d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"
+            ></path></svg
+          >
+        </div>
+        <span class="metric__n" data-p="likes">—</span>
+        <span class="metric__l">Me gusta</span>
+      </div>
     </section>
 
-    <!-- Gráficos -->
+    <!-- Cards secundarias: métricas derivadas -->
+    <section class="metrics-secondary" aria-label="Métricas secundarias">
+      <div class="metric-sm">
+        <span class="metric-sm__n" data-p="promVisitasDia">—</span>
+        <span class="metric-sm__l">Promedio visitas/día</span>
+      </div>
+      <div class="metric-sm">
+        <span class="metric-sm__n" data-p="tasaInteraccion">—</span>
+        <span class="metric-sm__l">Tasa de interacción (%)</span>
+      </div>
+      <div class="metric-sm">
+        <span class="metric-sm__n" data-p="ratioLikes">—</span>
+        <span class="metric-sm__l">Ratio likes / visitantes</span>
+      </div>
+    </section>
+
+    <!-- Gráficos fila 1: Visitas por día + Dispositivos -->
     <div class="grid2">
       <section class="card">
         <h2>Visitas por día <span class="muted">(últimos 14)</span></h2>
         <div class="chartbox"><canvas id="chartDia"></canvas></div>
-        <p class="empty" data-empty="dia" hidden>Aún no hay visitas registradas.</p>
+        <p class="empty" data-empty="dia" hidden>
+          Aún no hay visitas registradas.
+        </p>
       </section>
       <section class="card">
         <h2>Visitas por dispositivo</h2>
@@ -40,29 +130,30 @@ export const prerender = false;
       </section>
     </div>
 
-    <section class="card">
-      <h2>Interacción por sección <span class="muted">(clicks)</span></h2>
-      <div class="chartbox chartbox--tall"><canvas id="chartSec"></canvas></div>
-      <p class="empty" data-empty="sec" hidden>Aún no hay clicks registrados.</p>
-    </section>
+    <!-- Gráficos fila 2: Distribución horaria + Día de la semana -->
+    <div class="grid1">
+      <section class="card">
+        <h2>
+          Distribución horaria <span class="muted">(visitas por hora)</span>
+        </h2>
+        <div class="chartbox"><canvas id="chartHora"></canvas></div>
+        <p class="empty" data-empty="hora" hidden>Aún no hay datos.</p>
+      </section>
+    </div>
 
-    <!-- Mapa de calor -->
-    <section class="card">
-      <div class="heat__head">
-        <h2>Mapa de calor · zonas rojas de clicks</h2>
-        <div class="seg" role="group" aria-label="Filtrar por dispositivo">
-          <button class="seg__b is-on" data-dev="todos">Todos</button>
-          <button class="seg__b" data-dev="desktop">Escritorio</button>
-          <button class="seg__b" data-dev="mobile">Móvil</button>
-        </div>
-      </div>
-      <p class="muted heat__note">Cada punto es un click/tap según su posición en la página. Las zonas rojas concentran más interacción.</p>
-      <div class="heat__wrap" data-heat-wrap>
-        <canvas data-heat></canvas>
-        <p class="heat__empty" data-heat-empty hidden>Aún no hay clicks registrados.</p>
-      </div>
-      <div class="heat__legend"><span>menos</span><span class="heat__ramp"></span><span>más</span></div>
-    </section>
+    <!-- Gráficos fila 3: Tendencia comentarios/likes + Proporción interacciones -->
+    <div class="grid2">
+      <section class="card">
+        <h2>Tendencia de interacciones <span class="muted">(14 días)</span></h2>
+        <div class="chartbox"><canvas id="chartTrend"></canvas></div>
+        <p class="empty" data-empty="trend" hidden>Aún no hay datos.</p>
+      </section>
+      <section class="card">
+        <h2>Proporción de interacciones</h2>
+        <div class="chartbox"><canvas id="chartPie"></canvas></div>
+        <p class="empty" data-empty="pie" hidden>Aún no hay datos.</p>
+      </section>
+    </div>
 
     <!-- Comentarios -->
     <section class="card">
@@ -72,61 +163,277 @@ export const prerender = false;
   </main>
 
   <style>
-    .panel { max-width: 1080px; margin-inline: auto; padding: calc(var(--nav-h) + 1.5rem) var(--gutter) 4rem; }
-    .panel__top { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; justify-content: space-between; margin-bottom: 2rem; }
-    .panel__top h1 { font-size: var(--step-3); margin-top: 0.4rem; }
-    .panel__actions { display: flex; gap: 0.6rem; }
-    .pbtn { border: 1.5px solid var(--line); border-radius: 100px; padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; background: var(--white); transition: border-color .25s, transform .25s; }
-    .pbtn:hover { border-color: var(--sage-deep); transform: translateY(-2px); }
+    .panel {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding: calc(var(--nav-h) + 1.5rem) var(--gutter) 4rem;
+    }
+    .panel__top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .panel__top h1 {
+      font-size: var(--step-3);
+      margin-top: 0.4rem;
+    }
+    .panel__actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+    .pbtn {
+      border: 1.5px solid var(--line);
+      border-radius: 100px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--white);
+      transition:
+        border-color 0.25s,
+        transform 0.25s;
+    }
+    .pbtn:hover {
+      border-color: var(--sage-deep);
+      transform: translateY(-2px);
+    }
 
-    .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.4rem; }
-    .metric { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; }
-    .metric__n { display: block; font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; color: var(--terracotta-deep); }
-    .metric__l { font-size: var(--step--1); color: var(--ink-soft); }
+    /* ---- Métricas principales con ícono ---- */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .metric {
+      position: relative;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.3rem 1.1rem;
+      overflow: hidden;
+      transition:
+        transform 0.3s var(--ease),
+        box-shadow 0.3s;
+    }
+    .metric:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .metric__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .metric--sage .metric__icon {
+      background: linear-gradient(135deg, #7e9670, #a7bb98);
+    }
+    .metric--terr .metric__icon {
+      background: linear-gradient(135deg, #b07f61, #c79a7e);
+    }
+    .metric--blue .metric__icon {
+      background: linear-gradient(135deg, #4a7fb5, #6ba3d6);
+    }
+    .metric--rose .metric__icon {
+      background: linear-gradient(135deg, #c76e7e, #e09aa6);
+    }
+    /* Decorative accent bar at top */
+    .metric::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .metric--sage::before {
+      background: linear-gradient(90deg, #7e9670, #a7bb98);
+    }
+    .metric--terr::before {
+      background: linear-gradient(90deg, #b07f61, #c79a7e);
+    }
+    .metric--blue::before {
+      background: linear-gradient(90deg, #4a7fb5, #6ba3d6);
+    }
+    .metric--rose::before {
+      background: linear-gradient(90deg, #c76e7e, #e09aa6);
+    }
+    .metric__n {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      line-height: 1;
+      color: var(--ink);
+    }
+    .metric__l {
+      font-size: var(--step--1);
+      color: var(--ink-soft);
+    }
 
-    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(1.2rem, 3vw, 1.8rem); box-shadow: var(--shadow-sm); margin-bottom: 1.2rem; }
-    .card h2 { font-size: var(--step-1); margin-bottom: 1rem; }
-    .muted { color: var(--ink-soft); font-size: 0.85em; font-weight: 400; }
-    .empty { color: var(--ink-soft); font-style: italic; margin-top: .6rem; }
+    /* ---- Métricas secundarias ---- */
+    .metrics-secondary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+    .metric-sm {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      text-align: center;
+      transition: transform 0.3s var(--ease);
+    }
+    .metric-sm:hover {
+      transform: translateY(-2px);
+    }
+    .metric-sm__n {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      line-height: 1.1;
+      color: var(--sage-deep);
+      font-weight: 500;
+    }
+    .metric-sm__l {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      display: block;
+      margin-top: 0.3rem;
+    }
 
-    .grid2 { display: grid; gap: 1.2rem; }
-    .chartbox { position: relative; height: 260px; }
-    .chartbox--tall { height: 340px; }
+    /* ---- Cards / gráficos ---- */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.2rem, 3vw, 1.8rem);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.2rem;
+    }
+    .card h2 {
+      font-size: var(--step-1);
+      margin-bottom: 1rem;
+    }
+    .muted {
+      color: var(--ink-soft);
+      font-size: 0.85em;
+      font-weight: 400;
+    }
+    .empty {
+      color: var(--ink-soft);
+      font-style: italic;
+      margin-top: 0.6rem;
+    }
 
-    .heat__head { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; justify-content: space-between; }
-    .heat__note { margin: 0.4rem 0 1rem; }
-    .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 100px; overflow: hidden; }
-    .seg__b { padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); }
-    .seg__b.is-on { background: var(--sage-deep); color: var(--white); }
-    .heat__wrap { position: relative; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background:
-      repeating-linear-gradient(0deg, #fbf8f2, #fbf8f2 1px, transparent 1px, transparent 40px),
-      repeating-linear-gradient(90deg, #fbf8f2, #fbf8f2 1px, transparent 1px, transparent 40px), var(--cream); }
-    .heat__wrap canvas { display: block; width: 100%; }
-    .heat__empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-soft); font-style: italic; }
-    .heat__legend { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.8rem; font-size: var(--step--1); color: var(--ink-soft); }
-    .heat__ramp { flex: 1; max-width: 240px; height: 10px; border-radius: 100px; background: linear-gradient(90deg, #2c6fb0, #38b06f, #e7c93a, #d8632f, #c62d2d); }
+    .grid2 {
+      display: grid;
+      gap: 1.2rem;
+    }
+    .chartbox {
+      position: relative;
+      height: 280px;
+    }
 
-    .modlist { display: grid; gap: 0.8rem; }
-    .mod { border: 1px solid var(--line); border-left: 3px solid var(--sage); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; display: grid; gap: 0.3rem; }
-    .mod__top { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; }
-    .mod__name { font-weight: 600; }
-    .mod__date { font-size: 0.75rem; color: var(--ink-soft); }
-    .mod__text { color: var(--ink-soft); white-space: pre-wrap; }
-    .mod__del { border: 1.5px solid var(--line); border-radius: 100px; padding: 0.3rem 0.8rem; font-size: 0.78rem; font-weight: 600; color: var(--terracotta-deep); }
-    .mod__del:hover { border-color: var(--terracotta); }
+    /* ---- Moderación ---- */
+    .modlist {
+      display: grid;
+      gap: 0.8rem;
+    }
+    .mod {
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--sage);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1.1rem;
+      display: grid;
+      gap: 0.3rem;
+    }
+    .mod__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+    .mod__name {
+      font-weight: 600;
+    }
+    .mod__date {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+    }
+    .mod__text {
+      color: var(--ink-soft);
+      white-space: pre-wrap;
+    }
+    .mod__del {
+      border: 1.5px solid var(--line);
+      border-radius: 100px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--terracotta-deep);
+    }
+    .mod__del:hover {
+      border-color: var(--terracotta);
+    }
 
     @media (min-width: 640px) {
-      .metrics { grid-template-columns: repeat(5, 1fr); }
-      .grid2 { grid-template-columns: 1.4fr 1fr; }
+      .metrics {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .grid2 {
+        grid-template-columns: 1.4fr 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .metrics-secondary {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 
-  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script
+    is:inline
+    src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"
+  ></script>
   <script is:inline>
     (function () {
-      var nf = function (n) { return Number(n || 0).toLocaleString('es-EC'); };
+      var nf = function (n) {
+        return Number(n || 0).toLocaleString("es-EC");
+      };
       var charts = {};
-      var COL = { sage: '#7e9670', sageSoft: '#a7bb98', terr: '#c79a7e', terrDeep: '#b07f61', ink: '#6c665b', line: '#ece3d5' };
+      var COL = {
+        sage: "#7e9670",
+        sageSoft: "#a7bb98",
+        sageLight: "rgba(126,150,112,0.15)",
+        terr: "#c79a7e",
+        terrDeep: "#b07f61",
+        blue: "#4a7fb5",
+        blueLight: "rgba(74,127,181,0.15)",
+        rose: "#c76e7e",
+        roseLight: "rgba(199,110,126,0.15)",
+        ink: "#6c665b",
+        line: "#ece3d5",
+        amber: "#d4a24e",
+        amberLight: "rgba(212,162,78,0.15)",
+      };
+
+      var DAYS_ES = [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+      ];
 
       function draw(id, cfg, hasData, emptyKey) {
         var el = document.getElementById(id);
@@ -139,133 +446,402 @@ export const prerender = false;
       }
       function axisOpts(horizontal) {
         return {
-          responsive: true, maintainAspectRatio: false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { display: horizontal ? true : false, color: COL.line }, ticks: { color: COL.ink, precision: 0 } },
-            y: { grid: { color: COL.line }, beginAtZero: true, ticks: { color: COL.ink, precision: 0 } }
-          }
+            x: {
+              grid: { display: horizontal ? true : false, color: COL.line },
+              ticks: { color: COL.ink, precision: 0 },
+            },
+            y: {
+              grid: { color: COL.line },
+              beginAtZero: true,
+              ticks: { color: COL.ink, precision: 0 },
+            },
+          },
         };
       }
 
       function renderCharts(d) {
+        /* --- Visitas por día (línea) --- */
         var dia = d.porDia || [];
-        draw('chartDia', {
-          type: 'line',
-          data: { labels: dia.map(function (x) { return (x.day || '').slice(5); }),
-            datasets: [{ label: 'Visitas', data: dia.map(function (x) { return x.n; }),
-              borderColor: COL.sage, backgroundColor: 'rgba(126,150,112,0.15)', fill: true, tension: 0.35,
-              pointRadius: 3, pointBackgroundColor: COL.sage, borderWidth: 2 }] },
-          options: axisOpts(false)
-        }, dia.length > 0, 'dia');
+        draw(
+          "chartDia",
+          {
+            type: "line",
+            data: {
+              labels: dia.map(function (x) {
+                return (x.day || "").slice(5);
+              }),
+              datasets: [
+                {
+                  label: "Visitas",
+                  data: dia.map(function (x) {
+                    return x.n;
+                  }),
+                  borderColor: COL.sage,
+                  backgroundColor: COL.sageLight,
+                  fill: true,
+                  tension: 0.35,
+                  pointRadius: 3,
+                  pointBackgroundColor: COL.sage,
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: axisOpts(false),
+          },
+          dia.length > 0,
+          "dia",
+        );
 
+        /* --- Visitas por dispositivo (donut) --- */
         var disp = d.porDispositivo || [];
-        draw('chartDisp', {
-          type: 'doughnut',
-          data: { labels: disp.map(function (x) { return x.device === 'mobile' ? 'Móvil' : 'Escritorio'; }),
-            datasets: [{ data: disp.map(function (x) { return x.n; }), backgroundColor: [COL.terr, COL.sage], borderWidth: 0 }] },
-          options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { color: COL.ink } } } }
-        }, disp.length > 0, 'disp');
+        draw(
+          "chartDisp",
+          {
+            type: "doughnut",
+            data: {
+              labels: disp.map(function (x) {
+                return x.device === "mobile" ? "Móvil" : "Escritorio";
+              }),
+              datasets: [
+                {
+                  data: disp.map(function (x) {
+                    return x.n;
+                  }),
+                  backgroundColor: [COL.terr, COL.sage],
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "62%",
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { color: COL.ink, padding: 16, usePointStyle: true },
+                },
+              },
+            },
+          },
+          disp.length > 0,
+          "disp",
+        );
 
-        var sec = d.porSeccion || [];
-        draw('chartSec', {
-          type: 'bar',
-          data: { labels: sec.map(function (x) { return x.section; }),
-            datasets: [{ label: 'Clicks', data: sec.map(function (x) { return x.n; }), backgroundColor: COL.terr, borderRadius: 6 }] },
-          options: Object.assign(axisOpts(true), { indexAxis: 'y' })
-        }, sec.length > 0, 'sec');
+        /* --- Distribución horaria (barras) --- */
+        var hora = d.porHora || [];
+        // Fill all 24 hours
+        var horaMap = {};
+        hora.forEach(function (h) {
+          horaMap[h.hour] = h.n;
+        });
+        var horaLabels = [];
+        var horaData = [];
+        for (var i = 0; i < 24; i++) {
+          horaLabels.push(i + "h");
+          horaData.push(horaMap[i] || 0);
+        }
+        draw(
+          "chartHora",
+          {
+            type: "bar",
+            data: {
+              labels: horaLabels,
+              datasets: [
+                {
+                  label: "Visitas",
+                  data: horaData,
+                  backgroundColor: function (ctx) {
+                    var v = ctx.raw || 0;
+                    var max = Math.max.apply(null, horaData) || 1;
+                    var ratio = v / max;
+                    return (
+                      "rgba(74,127,181," + (0.3 + ratio * 0.7).toFixed(2) + ")"
+                    );
+                  },
+                  borderRadius: 4,
+                  borderSkipped: false,
+                },
+              ],
+            },
+            options: Object.assign({}, axisOpts(false), {
+              scales: {
+                x: {
+                  grid: { display: false },
+                  ticks: { color: COL.ink, maxRotation: 0, font: { size: 10 } },
+                },
+                y: {
+                  grid: { color: COL.line },
+                  beginAtZero: true,
+                  ticks: { color: COL.ink, precision: 0 },
+                },
+              },
+            }),
+          },
+          hora.length > 0,
+          "hora",
+        );
+
+        /* --- Visitas por día de la semana (barras) --- */
+        var dow = d.porDiaSemana || [];
+        var dowMap = {};
+        dow.forEach(function (dd) {
+          dowMap[dd.dow] = dd.n;
+        });
+        var dowLabels = [];
+        var dowData = [];
+        // Reorder: Mon-Sun (1-6, 0)
+        var dowOrder = [1, 2, 3, 4, 5, 6, 0];
+        dowOrder.forEach(function (di) {
+          dowLabels.push(DAYS_ES[di].substring(0, 3));
+          dowData.push(dowMap[di] || 0);
+        });
+        draw(
+          "chartDow",
+          {
+            type: "bar",
+            data: {
+              labels: dowLabels,
+              datasets: [
+                {
+                  label: "Visitas",
+                  data: dowData,
+                  backgroundColor: [
+                    COL.sage,
+                    COL.sageSoft,
+                    COL.terr,
+                    COL.amber,
+                    COL.blue,
+                    COL.rose,
+                    COL.terrDeep,
+                  ],
+                  borderRadius: 6,
+                  borderSkipped: false,
+                },
+              ],
+            },
+            options: Object.assign({}, axisOpts(false), {
+              scales: {
+                x: { grid: { display: false }, ticks: { color: COL.ink } },
+                y: {
+                  grid: { color: COL.line },
+                  beginAtZero: true,
+                  ticks: { color: COL.ink, precision: 0 },
+                },
+              },
+            }),
+          },
+          dow.length > 0,
+          "dow",
+        );
+
+        /* --- Tendencia comentarios + likes (líneas duales) --- */
+        var comsDia = d.comentariosPorDia || [];
+        var likesDia = d.likesPorDia || [];
+        // Merge dates
+        var allDates = {};
+        comsDia.forEach(function (c) {
+          allDates[c.day] = allDates[c.day] || {};
+          allDates[c.day].c = c.n;
+        });
+        likesDia.forEach(function (l) {
+          allDates[l.day] = allDates[l.day] || {};
+          allDates[l.day].l = l.n;
+        });
+        var trendDates = Object.keys(allDates).sort();
+        var trendComs = trendDates.map(function (d) {
+          return (allDates[d] && allDates[d].c) || 0;
+        });
+        var trendLikes = trendDates.map(function (d) {
+          return (allDates[d] && allDates[d].l) || 0;
+        });
+        var trendLabels = trendDates.map(function (d) {
+          return d.slice(5);
+        });
+        draw(
+          "chartTrend",
+          {
+            type: "line",
+            data: {
+              labels: trendLabels,
+              datasets: [
+                {
+                  label: "Comentarios",
+                  data: trendComs,
+                  borderColor: COL.blue,
+                  backgroundColor: COL.blueLight,
+                  fill: true,
+                  tension: 0.35,
+                  pointRadius: 4,
+                  pointBackgroundColor: COL.blue,
+                  borderWidth: 2,
+                },
+                {
+                  label: "Likes",
+                  data: trendLikes,
+                  borderColor: COL.rose,
+                  backgroundColor: COL.roseLight,
+                  fill: true,
+                  tension: 0.35,
+                  pointRadius: 4,
+                  pointBackgroundColor: COL.rose,
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { color: COL.ink, padding: 16, usePointStyle: true },
+                },
+              },
+              scales: {
+                x: { grid: { display: false }, ticks: { color: COL.ink } },
+                y: {
+                  grid: { color: COL.line },
+                  beginAtZero: true,
+                  ticks: { color: COL.ink, precision: 0 },
+                },
+              },
+            },
+          },
+          trendDates.length > 0,
+          "trend",
+        );
+
+        /* --- Proporción de interacciones (pastel) --- */
+        var pieData = [d.visitantes || 0, d.comentarios || 0, d.likes || 0];
+        var pieTotal = pieData[0] + pieData[1] + pieData[2];
+        draw(
+          "chartPie",
+          {
+            type: "pie",
+            data: {
+              labels: ["Visitantes únicos", "Comentarios", "Likes"],
+              datasets: [
+                {
+                  data: pieData,
+                  backgroundColor: [COL.sage, COL.blue, COL.rose],
+                  borderWidth: 2,
+                  borderColor: "#fffdf9",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { color: COL.ink, padding: 14, usePointStyle: true },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (ctx) {
+                      var pct = pieTotal
+                        ? ((ctx.raw / pieTotal) * 100).toFixed(1)
+                        : 0;
+                      return ctx.label + ": " + nf(ctx.raw) + " (" + pct + "%)";
+                    },
+                  },
+                },
+              },
+            },
+          },
+          pieTotal > 0,
+          "pie",
+        );
       }
 
       function renderComments(list) {
-        var ml = document.querySelector('[data-modlist]');
-        ml.innerHTML = '';
-        if (!list.length) { ml.innerHTML = '<p class="muted">Aún no hay comentarios.</p>'; return; }
+        var ml = document.querySelector("[data-modlist]");
+        ml.innerHTML = "";
+        if (!list.length) {
+          ml.innerHTML = '<p class="muted">Aún no hay comentarios.</p>';
+          return;
+        }
         list.forEach(function (c) {
-          var el = document.createElement('div'); el.className = 'mod';
-          var top = document.createElement('div'); top.className = 'mod__top';
-          var meta = document.createElement('div');
-          var nm = document.createElement('span'); nm.className = 'mod__name'; nm.textContent = c.name;
-          var dt = document.createElement('span'); dt.className = 'mod__date'; dt.textContent = '  ' + new Date(c.ts).toLocaleString('es-EC');
-          meta.appendChild(nm); meta.appendChild(dt);
-          var del = document.createElement('button'); del.className = 'mod__del'; del.textContent = 'Eliminar';
-          del.addEventListener('click', function () {
-            if (!confirm('¿Eliminar este comentario?')) return;
-            fetch('/api/moderar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: c.id }) }).then(load);
+          var el = document.createElement("div");
+          el.className = "mod";
+          var top = document.createElement("div");
+          top.className = "mod__top";
+          var meta = document.createElement("div");
+          var nm = document.createElement("span");
+          nm.className = "mod__name";
+          nm.textContent = c.name;
+          var dt = document.createElement("span");
+          dt.className = "mod__date";
+          dt.textContent = "  " + new Date(c.ts).toLocaleString("es-EC");
+          meta.appendChild(nm);
+          meta.appendChild(dt);
+          var del = document.createElement("button");
+          del.className = "mod__del";
+          del.textContent = "Eliminar";
+          del.addEventListener("click", function () {
+            if (!confirm("¿Eliminar este comentario?")) return;
+            fetch("/api/moderar", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ id: c.id }),
+            }).then(load);
           });
-          top.appendChild(meta); top.appendChild(del);
-          var tx = document.createElement('p'); tx.className = 'mod__text'; tx.textContent = c.body;
-          el.appendChild(top); el.appendChild(tx);
+          top.appendChild(meta);
+          top.appendChild(del);
+          var tx = document.createElement("p");
+          tx.className = "mod__text";
+          tx.textContent = c.body;
+          el.appendChild(top);
+          el.appendChild(tx);
           ml.appendChild(el);
         });
       }
 
       function load() {
-        return fetch('/api/stats').then(function (r) { if (!r.ok) return null; return r.json(); }).then(function (d) {
-          if (!d) return;
-          ['visitas', 'visitantes', 'comentarios', 'likes', 'clicks'].forEach(function (k) {
-            var e = document.querySelector('[data-p="' + k + '"]'); if (e) e.textContent = nf(d[k]);
-          });
-          var cc = document.querySelector('[data-cc]'); if (cc) cc.textContent = '(' + nf(d.comentarios) + ')';
-          renderCharts(d);
-          renderComments(d.comentarios_lista || []);
-        }).catch(function () {});
+        return fetch("/api/stats")
+          .then(function (r) {
+            if (!r.ok) return null;
+            return r.json();
+          })
+          .then(function (d) {
+            if (!d) return;
+            // Main metrics
+            ["visitas", "visitantes", "comentarios", "likes"].forEach(
+              function (k) {
+                var e = document.querySelector('[data-p="' + k + '"]');
+                if (e) e.textContent = nf(d[k]);
+              },
+            );
+            // Secondary metrics
+            var promEl = document.querySelector('[data-p="promVisitasDia"]');
+            if (promEl) promEl.textContent = nf(d.promVisitasDia || 0);
+
+            var tasaEl = document.querySelector('[data-p="tasaInteraccion"]');
+            if (tasaEl) tasaEl.textContent = (d.tasaInteraccion || 0) + "%";
+
+            var ratioEl = document.querySelector('[data-p="ratioLikes"]');
+            if (ratioEl) {
+              var ratio = d.visitantes
+                ? ((d.likes / d.visitantes) * 100).toFixed(1)
+                : "0.0";
+              ratioEl.textContent = ratio + "%";
+            }
+
+            var cc = document.querySelector("[data-cc]");
+            if (cc) cc.textContent = "(" + nf(d.comentarios) + ")";
+            renderCharts(d);
+            renderComments(d.comentarios_lista || []);
+          })
+          .catch(function () {});
       }
 
-      /* ---- Mapa de calor (canvas propio) ---- */
-      var rampCache = null;
-      function ramp() {
-        if (rampCache) return rampCache;
-        var c = document.createElement('canvas'); c.width = 256; c.height = 1;
-        var x = c.getContext('2d');
-        var g = x.createLinearGradient(0, 0, 256, 0);
-        g.addColorStop(0.0, '#2c6fb0'); g.addColorStop(0.35, '#38b06f'); g.addColorStop(0.6, '#e7c93a');
-        g.addColorStop(0.8, '#d8632f'); g.addColorStop(1.0, '#c62d2d');
-        x.fillStyle = g; x.fillRect(0, 0, 256, 1);
-        rampCache = x.getImageData(0, 0, 256, 1).data; return rampCache;
-      }
-      function drawHeat(points) {
-        var wrap = document.querySelector('[data-heat-wrap]');
-        var canvas = document.querySelector('[data-heat]');
-        var empty = document.querySelector('[data-heat-empty]');
-        var W = Math.max(320, Math.round(wrap.clientWidth));
-        var H = Math.round(W * 1.5);
-        canvas.width = W; canvas.height = H;
-        var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, W, H);
-        empty.hidden = points.length > 0;
-        if (!points.length) return;
-        var r = Math.max(16, Math.round(W * 0.035));
-        ctx.globalCompositeOperation = 'lighter';
-        points.forEach(function (p) {
-          var x = p.x * W, y = p.y * H;
-          var grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-          grad.addColorStop(0, 'rgba(0,0,0,0.16)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
-          ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-        });
-        ctx.globalCompositeOperation = 'source-over';
-        var img = ctx.getImageData(0, 0, W, H); var data = img.data; var rmp = ramp();
-        for (var i = 0; i < data.length; i += 4) {
-          var a = data[i + 3]; if (!a) continue;
-          var idx = Math.min(255, a) * 4;
-          data[i] = rmp[idx]; data[i + 1] = rmp[idx + 1]; data[i + 2] = rmp[idx + 2];
-          data[i + 3] = Math.min(235, a + 40);
-        }
-        ctx.putImageData(img, 0, 0);
-      }
-      var currentDev = 'todos';
-      function loadHeatmap() {
-        fetch('/api/heatmap?device=' + currentDev).then(function (r) { if (!r.ok) return null; return r.json(); })
-          .then(function (d) { if (d) drawHeat(d.puntos || []); }).catch(function () {});
-      }
-      document.querySelectorAll('[data-dev]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          document.querySelectorAll('[data-dev]').forEach(function (x) { x.classList.remove('is-on'); });
-          b.classList.add('is-on'); currentDev = b.dataset.dev; loadHeatmap();
-        });
-      });
-      var rt;
-      window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(loadHeatmap, 250); });
-
-      load(); loadHeatmap();
+      load();
       setInterval(load, 30000);
     })();
   </script>

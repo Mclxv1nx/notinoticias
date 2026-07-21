@@ -77,4 +77,18 @@ export const SQL = {
     FROM clicks GROUP BY section ORDER BY n DESC LIMIT 20`,
   countClicks: `SELECT COUNT(*) AS n FROM clicks`,
   visitsByDevice: `SELECT device, COUNT(*) AS n FROM visits GROUP BY device`,
+
+  // Panel analytics (nuevos)
+  visitsByHour: `
+    SELECT CAST(strftime('%H', ts / 1000, 'unixepoch') AS INTEGER) AS hour, COUNT(*) AS n
+    FROM visits GROUP BY hour ORDER BY hour`,
+  commentsByDay: `
+    SELECT strftime('%Y-%m-%d', ts / 1000, 'unixepoch') AS day, COUNT(*) AS n
+    FROM comments WHERE approved = 1 GROUP BY day ORDER BY day DESC LIMIT 14`,
+  likesByDay: `
+    SELECT strftime('%Y-%m-%d', ts / 1000, 'unixepoch') AS day, COUNT(*) AS n
+    FROM likes GROUP BY day ORDER BY day DESC LIMIT 14`,
+  visitsByDayOfWeek: `
+    SELECT CAST(strftime('%w', ts / 1000, 'unixepoch') AS INTEGER) AS dow, COUNT(*) AS n
+    FROM visits GROUP BY dow ORDER BY dow`,
 };

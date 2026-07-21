@@ -118,20 +118,38 @@ export async function publicCounters() {
 
 /* ----------------------------------------------------- Estadísticas del panel */
 export async function fullStats() {
-  const [base, clk, dia, sec, dev, coms] = await Promise.all([
+  const [base, dia, dev, coms, porHora, comsDia, likesDia, dowData] = await Promise.all([
     publicCounters(),
-    first('countClicks'),
     all('visitsByDay'),
-    all('clicksBySection'),
     all('visitsByDevice'),
     listComments(500),
+    all('visitsByHour'),
+    all('commentsByDay'),
+    all('likesByDay'),
+    all('visitsByDayOfWeek'),
   ]);
+
+  const porDia = dia.reverse();
+
+  // Promedio visitas/día (últimos 14 días con datos)
+  const totalVisitasDias = porDia.reduce((s, d) => s + num(d.n), 0);
+  const promVisitasDia = porDia.length ? Math.round(totalVisitasDias / porDia.length) : 0;
+
+  // Tasa de interacción: (comentarios + likes) / visitantes únicos
+  const tasaInteraccion = base.visitantes
+    ? (((base.comentarios + base.likes) / base.visitantes) * 100).toFixed(1)
+    : '0.0';
+
   return {
     ...base,
-    clicks: num(clk.n),
-    porDia: dia.reverse(),
-    porSeccion: sec,
+    porDia,
     porDispositivo: dev,
     comentarios_lista: coms,
+    porHora,
+    comentariosPorDia: comsDia.reverse(),
+    likesPorDia: likesDia.reverse(),
+    porDiaSemana: dowData,
+    promVisitasDia,
+    tasaInteraccion: parseFloat(tasaInteraccion),
   };
 }

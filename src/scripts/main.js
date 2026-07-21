@@ -26,6 +26,7 @@ export function initApp() {
   // La lógica funcional se activa siempre (con o sin animación).
   setupNav();
   setupVideos();
+  setupYouTubeModal();
   setupAudios();
   setupGallery();
   setupContactForm();
@@ -318,6 +319,49 @@ function setupVideos() {
         play();
       }
     });
+  });
+}
+
+/* --------------------------------------------------------- Modal YouTube */
+/* Abre un modal con el video embebido al pulsar [data-yt-modal]. */
+function setupYouTubeModal() {
+  const overlay = $('[data-yt-overlay]');
+  if (!overlay) return;
+  const frame = $('[data-yt-frame]', overlay);
+  const closeBtn = $('[data-yt-close]', overlay);
+
+  const open = (videoId) => {
+    frame.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+    iframe.title = 'Entrevista en YouTube';
+    iframe.allow =
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    frame.appendChild(iframe);
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    window.__lenis?.stop();
+  };
+
+  const close = () => {
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    // Destroy iframe to stop playback
+    setTimeout(() => { frame.innerHTML = ''; }, 350);
+    window.__lenis?.start();
+  };
+
+  $$('[data-yt-modal]').forEach((btn) => {
+    btn.addEventListener('click', () => open(btn.dataset.ytModal));
+  });
+
+  closeBtn?.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
   });
 }
 

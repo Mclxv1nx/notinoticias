@@ -36,7 +36,6 @@ export const navegacion = [
   { id: 'reportaje', etiqueta: 'Reportaje' },
   { id: 'multimedia', etiqueta: 'Multimedia' },
   { id: 'estadisticas', etiqueta: 'Datos' },
-  { id: 'proyecto', etiqueta: 'El proyecto' },
   { id: 'entrevistas', etiqueta: 'Entrevistas' },
   { id: 'conclusiones', etiqueta: 'Conclusiones' },
   { id: 'contacto', etiqueta: 'Contacto' },
@@ -369,7 +368,7 @@ export const entrevistaEscrita = {
  * Conclusiones y autoría del reportaje
  * -------------------------------------------------------------------------- */
 export const conclusiones = {
-  titulo: 'Conclusiones',
+  titulo: 'Tradición Con Futuro',
   parrafos: [
     'San Antonio de Ibarra es un símbolo de identidad, creatividad y tradición, cuyo legado ha ' +
       'trascendido generaciones y ha dado reconocimiento nacional e internacional a la comunidad.',
