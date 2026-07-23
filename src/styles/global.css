@@ -159,6 +159,10 @@ p {
 .section__head {
   max-width: 46rem;
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  /* ── Patrón F/E: ancla visual izquierda ── */
+  border-left: 3.5px solid var(--terracotta);
+  padding-left: clamp(1rem, 2.5vw, 1.6rem);
+  text-align: left;
 }
 .section__head h2 {
   font-size: var(--step-4);
@@ -171,6 +175,8 @@ p {
   font-family: var(--font-display);
   font-weight: 300;
   line-height: 1.4;
+  /* ── Patrón F/E: segunda barra más corta ── */
+  max-width: 36ch;
 }
 
 /* Rótulo numérico de sección */
@@ -612,9 +618,20 @@ p {
 .bloque {
   display: grid;
   gap: clamp(1.2rem, 4vw, 3rem);
-  align-items: center;
+  align-items: start;
   padding-block: clamp(2.5rem, 6vw, 5rem);
   border-top: 1px solid var(--line);
+}
+/* ── Patrón F/E: número de bloque como ancla vertical izquierda ── */
+.bloque__num {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--terracotta) 35%, transparent);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  user-select: none;
 }
 .bloque__text h3 {
   font-size: var(--step-2);
@@ -1156,6 +1173,11 @@ p {
 .contacto {
   display: grid;
   gap: clamp(1.6rem, 4vw, 3rem);
+}
+.contacto__intro {
+  /* ── Patrón F/E: acento izquierdo ── */
+  border-left: 3px solid var(--terracotta);
+  padding-left: clamp(1rem, 2.5vw, 1.4rem);
 }
 .contacto__intro p {
   color: var(--ink-soft);
@@ -1803,6 +1825,8 @@ p {
   padding: clamp(1.8rem, 5vw, 3.2rem);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+  /* ── Patrón F/E: borde izquierdo de acento ── */
+  border-left: 4px solid var(--sage-deep);
 }
 .conclusiones__mark {
   position: absolute;
@@ -1946,9 +1970,10 @@ html {
   .hero__grid { grid-template-columns: 1.05fr 0.95fr; }
   .hero__title { font-size: var(--step-5); }
   .bloque { grid-template-columns: 1fr 1fr; }
-  .bloque:nth-child(even) .bloque__media { order: -1; }
+  /* ── Patrón F/E: texto SIEMPRE a la izquierda, imagen a la derecha ── */
+  /* (Eliminada la alternancia nth-child(even) que rompía el escaneo vertical) */
   .maestro { grid-template-columns: 1fr 1fr; }
-  .maestro:nth-child(even) .maestro__media { order: 2; }
+  /* (Eliminada la alternancia nth-child(even) en maestro) */
   .proyecto__grid { grid-template-columns: 1.1fr 0.9fr; }
   .contacto { grid-template-columns: 1fr; align-items: start; }
   .footer__grid { grid-template-columns: 1.4fr 1fr 1fr; }
@@ -1958,6 +1983,36 @@ html {
 
 @media (min-width: 1200px) {
   .videos { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── Patrón F/E: línea guía vertical izquierda (solo desktop) ── */
+.f-guide {
+  position: relative;
+}
+.f-guide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gutter) - 8px);
+  width: 1.5px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--terracotta) 22%, transparent) 8%,
+    color-mix(in srgb, var(--sage-soft) 30%, transparent) 50%,
+    color-mix(in srgb, var(--terracotta) 22%, transparent) 92%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+  /* Solo visible en desktop */
+  display: none;
+}
+@media (min-width: 900px) {
+  .f-guide::before {
+    display: block;
+  }
 }
 
 /* ------------------------------------------------ Accesibilidad: menos movimiento */

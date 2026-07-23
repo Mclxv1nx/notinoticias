@@ -16,9 +16,10 @@ import { reportaje, artesanos } from "../data/reportaje.js";
     <!-- Bloques narrativos con imagen de apoyo -->
     <div class="reportaje__bloques">
       {
-        reportaje.bloques.map((b) => (
+        reportaje.bloques.map((b, i) => (
           <article class="bloque">
             <div class="bloque__text" data-reveal>
+              <span class="bloque__num">{String(i + 1).padStart(2, '0')}</span>
               <h3>{b.titulo}</h3>
               {b.parrafos.map((p) => (
                 <p>{p}</p>
